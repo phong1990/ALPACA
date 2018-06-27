@@ -1,114 +1,55 @@
 # ALPACA
-ExAssist is an Android Studio plugin for recommending exception handling patterns.  
+ALPACA is an app reviews opinions mining tool based on topics and intentions.  
 Copyright (C) 2017-2018 SIS Lab, Auburn University
 
 This program is free software. 
 
-Contact: tam@auburn.edu 
+Contact: lenniel@auburn.edu (Phong Vu)
   
-* [Poster at ICSE 2018 (pre-print)](https://bitbucket.org/tamnguyenthe/exassist/raw/b33885b9b5aa5cb64dd7ddbed5a73c15fe675412/resources/paper/ICSE_Poster_from_Research_Track_2018_32.pdf)
+
 * [Video Demo](https://www.youtube.com/watch?v=J8JZtrWc3yE)
 
 ## Introduction
-**ExAssist** is a code recommendation tool for exception handling and is released as a plugin of IntelliJ IDEA and Android Studio. 
-**ExAssist** predicts what types of exception could occur in a given piece of code and recommends proper exception handling code for such an exception. 
-When requested, it will add such code into the given piece of code.
-After installation, it is incorporated with the IDE and users can invoke it directly via shortcut key Ctrl + Alt + {R, H} or via the menu bar.
+**ALPACA** is a tool for extracting user opinions from app review using topics and intentions. It has some of the core functions of MARK (2016) and Phrase-based (2017) tools, while also providing a new novel function to extract opinions.
 ## Installation
-1. Download the plugin installation file ([ExAssist.zip](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/87732c699dbb1c3f65232f9b69cfe77663f1f808/ExAssist.zip))
-2. Press Ctrl+Alt+S or choose File | Settings (for Windows and Linux) or IntelliJ IDEA | Preferences (for macOS) from the main menu, and then go to Plugins.
-
-![Step 2](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/master/resources/figures/Step2.PNG)
-
-3. Click the Install plugin from disk.
-
-![Step 3](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/master/resources/figures/Step3.PNG)
-
-4. In the dialog that opens, navigate to the location of the downloaded installation file.
-5. Confirm your intention to install the selected plugin.
-6. Click Close.
-7. Click OK in the Settings dialog and restart IntelliJ IDEA for the changes to take effect.
-
-![Step 4](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/master/resources/figures/Step4.PNG)
-
+1. Download the running package file ([ALPACARunningPackage.zip](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/87732c699dbb1c3f65232f9b69cfe77663f1f808/ExAssist.zip))
+2. Unzip the package.
+7. Run ALPACA.jar (no installation required)
 ## Usage
-### Recommending Exception Types
-The figure below shows the usage of ExAssist in Recommending Exception Types. 
+### Extracting opinions
+1a. If you have the folder that contains compatible data for ALPACA, you can choose it as your "Data Folder"
+1b. If you only have raw review data, first you will need to convert it into our .csv format (UTF-8, default separator). An example of the csv file can be found in the running package. Click on the "Import CSV" button to import it to an empty data folder of your choice. You only have to import once, next time you only need step 1a.
 
-![Figure 1](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/master/resources/figures/first_usage.png)
+2. Now that you have the data folder, you will need to provide the config file for the Text Normalizer module. This config file will apply debug mode and direct ALPACA to the correct location of the dictionary folder in your computer. An example of the config file is inside the dictionary folder of our running package. You will need to change the directory path in there before running ALPACA.
 
-Assume a developer is writing
-code to open and get data from a database. developer is aware that the code is dealing with database and Cursor
-objects might throw unchecked exceptions at runtime, but she
-might be unsure whether to catch exceptions on the code and which
-type of exception to catch. The built-in exception checker in Android
-Studio only supports adding checked exceptions, thus, does
-not help her to make appropriate action in this case.
-ExAssist aims to support the developer to make decisions whether
-or not to add a try-catch block and what type of exception to caught.
-The developer invokes ExAssist by first selecting the portion of
-code that she wants to check for exception then pressing Ctrl + Alt + R. Figure 1 shows a screenshot of Android Studio with ExAssist
-invoked for the portion of code that using the Cursor object for
-reading data from database. 
+3. Preprocessing: This step is required for ALPACA to analyze your data, and only needed to be done once. Please choose both word2vec training and pattern learning unless you know what you are doing (e.g. you have a better word2vec file from somewhere else, or you provide your own patterns). The artifacts produced by those options are vital to the next steps.
 
-As seen, ExAssist suggests that the code
-is likely to throw an unchecked exception. It also displays a ranked
-list of unchecked exceptions that could be thrown from the current
-selecting code. Each unchecked exception in the ranked list has a
-confident score represents how likely the exception will be thrown
-from the code. The value for confident scores is between 0 and 1.
-The higher the value of the confident score, the higher likelihood
-the exception type is thrown. In this example, SQLiteException has
-the highest score of 0.80. If the developer chooses that exception
-type, the currently selected code will be wrapped in a try-catch
-block with SQLiteException in the catch expression.
+4. Extrating Keywords: This is straight forward. The result is a csv file with different ranking schemas for all keywords found in your data. This is similar to keyword ranking and extraction of MARK (2016). DO NOT SKIP THIS STEP unless you know what you are doing (e.g. providing your own keyword ranking for your research)
 
-ExAssist uses the context of current selecting code to infer
-whether or not adding exception handling code and the type of
-the exception. For example, in the figure below, the context changes as the
-developer selects the portion of code for opening and querying on
-the SQLiteDatabase object. 
+5. Expanding topic (OPTIONAL): This option allow you to explore the topic you are interested about by providing keywords you think related to that topic. ALPACA will analyze those keywords, expand them into a bigger relevant set of keywords and show you the collective summary of the topic in phrase format. This result is the same as our Phrase-based tool's.
 
-![Figure 2](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/master/resources/figures/second_usage.png)
+6. Expanding Intent Pattern (RECOMMENDED): This option is not required, but it would greatly improve the result of ALPACA by expanding your patterns using the data from your reviews. There are two default intentions: Requests and Complaints. However, you can make your own patterns as in our comparison.csv example in the running package. The pattern format has to contain at least a functional word (like the words in ALPACARunningPackage\dictionary\baseWord\misc\) and at least a POS tag (from  [Penn Tree Bank site](https://catalog.ldc.upenn.edu/docs/LDC99T42/tagguid1.pdf) ). You can define different intentions based on your interest and find more similar patterns from you data. Remember to set your threshold of how similar the patterns need to be to the original patterns.
 
-Thus, ExAssist updates the recommendation
-list with SQLException has the highest confident of 0.81,
-which is highest among all other exception types.
-ExAssist could provide recommendations for a selected portion
-of code includes one or multiple method calls. Additionally, ExAssist
-could also recommend not to add try-catch block if it infers
-that the selected code is very unlikely to throw an unchecked
-exception. For example, if the developer selects the statement bookTitles.add(bookname);
-and queries ExAssist, the tool will return an
-empty list of exceptions as it is very unlikely the selected method
-throws exceptions when it is executed.
+7. Extracting opinions: An opinion is a phrase that match an intention pattern and describe the topic of interest. You can import the keywords set from step 5 and the pattern set expanded on step 6 (or use our default intentions, but the results will not be as good since ALPACA is data-driven). Please remember to choose a threshold for this step as it would directly affect the final result. The result is an .html file with all the opinions found.
 
-### Recommending Exception Repairs
-Handling exception situations and executing necessary recovery actions are important as 
-it could help apps continue to run properly when an exception
-occurs. For example, when an app reuses resources such as database
-connections or files, the app should release the resources if
-an exception is thrown. ExAssist is also designed to recommend
-such repairing actions in the exception handling code based on the
-context in the try block. The figure below demonstrates an usage of ExAssist in the task. 
+### Sumarizing topics (Phrase-based 2017):
+  read step 5 above.
 
-![Figure 3](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/master/resources/figures/third_usage.png)
-
-After adding a try-catch block with SQLiteException for the code in the previous scenario, 
-the developer wants to perform recovery actions.
-To invoke ExAssist, she moves the cursor to the first line of the catch
-and presses Ctrl + Alt + H. ExAssist then will analyze the context
-of the code and provide repairing actions in the recommendation
-windows. In the example, ExAssist detects that the Cursor object
-should be closed to release all of its resources and making it invalid
-for further usages. It also suggests to set bookTitles equals null to
-indicate the error while collecting data from cursor. If the developer
-chooses the recommended actions, ExAssist will generate the code
-in the catch block as in the Figure above.
-
+### Analyzing keywords (MARK 2016):
+  read step 4 and 5. 
+  We will add the interface of MARK in the future.
+  
 ## Data
-1. Our empirical data is stored under resources/empirical_data. The folder contains:
-1.1. ExceptionBugFixes.xlsx: 380 exception bug fixes across 10 projects
-1.2. 4000Apps.csv: List of 4000 android apps used in our empirical study and evaluation.
-2. Our data for XRank model is stored under resourses/xrank
-3. Our data for XHand model is stored under resourses/xhand
+1. Our vocabulary data is stored under ALPACARunningPackage\dictionary\baseWord. The folder contains:
+1.1. \dictionary\misc: all functional words. You can add more words of interest to domain.txt. Those words will be used to define patterns. (like "fix" is a common word in reviews, often indicating a problem needed fixing.)
+1.2. \dictionary\wordnet: contains all the words from wordnet 3.0
+1.3. \dictionary\newword: contains the words that are not from wordnet 3.0, or not well defined (such as lacking verb/noun/adj forms, or lacking irregular variants)
+2. The \dictionary\correctorTraining folder is a text corpus from wikipedia, used to improve the accuracy of our spelling corrector. You can change to other text corpus if you want to.
+3. \dictionary\edu folder contain a Stanford NLP tagger for English.
+4. \dictionary\improvised has some words, which I don't remember what they are for, but I'm too afraid to delete them and risk breaking the program.
+5. \dictionary\Map: contains the correct words for common mistakes in reviews. I have discussed about this in the MARK paper. Overtime, I will add more and more common errors to this map with new data.
+6. \dictionary\stop: those are the stop words. 
+7. \dictionary\trigramData: this is a trained model for our spellCorrector. Do not delete or modify anything from it. We trained it with a few billions lines of text so it's likely not not ever get an update.
+8. \dictionary\config.ini: this file is for locating the dictionary folder in ALPACA. You need to change the path inside to the correct location in your computer.
+9. \aditionalText: this is the processed text of 3 millions reviews. You can use it as a supplement text corpus for training word2vec for your data if you don't have too many reviews. It helps the deeplearning process understand the relationships between words better in the context of mobile app. Therefore, the more reviews you have, the better ALPACA will be able to understand it.
+10. \replication: this has around 13k reviews of Magic Tiles to replicate our experiments and for demonstrate the usage of ALPACA. You can use it to learn how to use our tool.
