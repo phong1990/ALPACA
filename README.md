@@ -7,7 +7,7 @@ This program is free software.
 Contact: lenniel@auburn.edu (Phong Vu)
   
 
-* [Video Demo](https://www.youtube.com/watch?v=J8JZtrWc3yE)
+* [Video Demo](https://www.youtube.com/watch?v=UNw573qtEpw)
 
 ## Introduction
 **ALPACA** is a tool for extracting user opinions from app review using topics and intentions. It has some of the core functions of MARK (2016) and Phrase-based (2017) tools, while also providing a new novel function to extract opinions.
@@ -19,6 +19,7 @@ Contact: lenniel@auburn.edu (Phong Vu)
 ### Extracting opinions
 1a. If you have the folder that contains compatible data for ALPACA, you can choose it as your "Data Folder"
 1b. If you only have raw review data, first you will need to convert it into our .csv format (UTF-8, default separator). An example of the csv file can be found in the running package. Click on the "Import CSV" button to import it to an empty data folder of your choice. You only have to import once, next time you only need step 1a.
+![Step 1](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/master/resources/figures/Step2.PNG)
 
 2. Now that you have the data folder, you will need to provide the config file for the Text Normalizer module. This config file will apply debug mode and direct ALPACA to the correct location of the dictionary folder in your computer. An example of the config file is inside the dictionary folder of our running package. You will need to change the directory path in there before running ALPACA.
 
