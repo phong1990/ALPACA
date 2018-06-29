@@ -54,6 +54,7 @@ public class MainGUI extends JPanel implements ActionListener {
 	protected CSVImporterGUI csvImporterDialog;
 	protected TopicGUI topicDialog;
 	protected OpinionGUI opinionDialog;
+	JTextArea textLog = null;
 	protected boolean isDatafolderReady = false;
 	protected boolean isConfigReady = false;
 	public JProgressBar progressBar = null;
@@ -77,10 +78,12 @@ public class MainGUI extends JPanel implements ActionListener {
 		ConfigFileChoser.setEnabled(enable);
 		cancelTaskButton.setEnabled(!enable);
 	}
+
 	public void setProgressbarValue(int val) {
 
 		progressBar.setValue(val);
 	}
+
 	public void enableAnalyzing(boolean enable) {
 		keywordButton.setEnabled(enable);
 		topicButton.setEnabled(enable);
@@ -147,7 +150,7 @@ public class MainGUI extends JPanel implements ActionListener {
 		});
 		JLabel DataFieldLabel = new JLabel("Data Folder: ");
 		DataFieldLabel.setLabelFor(dataFolderTextField);
-		dataFileChoser = new CustomFileDirChooser(dataFolderTextField, null, true, aframe, false,null);
+		dataFileChoser = new CustomFileDirChooser(dataFolderTextField, null, true, aframe, false, null);
 
 		// Text Normalizer config file: [ ][change]
 		configTextField = new JTextField(10);
@@ -190,8 +193,8 @@ public class MainGUI extends JPanel implements ActionListener {
 		});
 		JLabel ConfigFieldLabel = new JLabel("Text Normalizer Config File: ");
 		ConfigFieldLabel.setLabelFor(configTextField);
-		ConfigFileChoser = new CustomFileDirChooser(configTextField, null, false, aframe, false,new FileNameExtensionFilter("ini file", "ini"));
-
+		ConfigFileChoser = new CustomFileDirChooser(configTextField, null, false, aframe, false,
+				new FileNameExtensionFilter("ini file", "ini"));
 
 		// panel for setting.
 		// Create a label to put messages during an action event.
@@ -211,7 +214,7 @@ public class MainGUI extends JPanel implements ActionListener {
 		importcsvButton.setPreferredSize(new Dimension(100, 20));
 		JPanel panelcsv = new JPanel();
 		panelcsv.add(importcsvButton);
-		
+
 		subsettingsPane.add(DataFieldLabel);
 		subsettingsPane.add(dataFileChoser);
 		subsettingsPane.add(panelcsv);
@@ -222,16 +225,16 @@ public class MainGUI extends JPanel implements ActionListener {
 		SpringUtilities.makeCompactGrid(subsettingsPane, 2, 3, // rows, cols
 				6, 6, // initX, initY
 				6, 6); // xPad, yPad
-		
-		settingsPane.add(subsettingsPane,BorderLayout.PAGE_START);
+
+		settingsPane.add(subsettingsPane, BorderLayout.PAGE_START);
 		settingsPane.add(actionLabel, BorderLayout.PAGE_END);
-		
+
 		// create non-editable text field for displaying log.
 		// Create a text log area.
-		JTextArea textLog = new JTextArea("Start Time: " + System.currentTimeMillis() + "\n");
+		textLog = new JTextArea("Start Time: " + System.currentTimeMillis() + "\n");
 
 		DefaultCaret caret = (DefaultCaret) textLog.getCaret(); // ←
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);  
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		if (!DEBUG) {
 			// Now create a new TextAreaOutputStream to write to our JTextArea control and
 			// wrap a
@@ -257,7 +260,7 @@ public class MainGUI extends JPanel implements ActionListener {
 						BorderFactory.createEmptyBorder(5, 5, 5, 5)), areaScrollPane.getBorder()));
 		JPanel upperLogPanel = new JPanel(new BorderLayout());
 		JLabel logFileLocation = new JLabel("logALPACA.log");
-		CustomFileDirChooser logSaverFileChooser = new CustomFileDirChooser(null, logFileLocation, false, aframe, false,null);
+		LogFileSaver logSaverFileChooser = new LogFileSaver(aframe, new FileNameExtensionFilter("txt file", "txt"));
 		upperLogPanel.add(logFileLocation, BorderLayout.LINE_START);
 		upperLogPanel.add(logSaverFileChooser, BorderLayout.LINE_END);
 		JPanel bottomLogPanel = new JPanel(new BorderLayout());
@@ -398,7 +401,7 @@ public class MainGUI extends JPanel implements ActionListener {
 			if (!tmpFile.exists() || !tmpFile.isDirectory()) {
 				actionLabel.setText("Notice: please select data folder file location");
 			} else {
-				String pattFile = FileDataAdapter.getLevelLocationDir("POSpatterns/", datadirectory+"/",
+				String pattFile = FileDataAdapter.getLevelLocationDir("POSpatterns/", datadirectory + "/",
 						PreprocesorMain.LV2_ROOTWORD_STEMMING) + "rawPattern.csv";
 				System.out.println(pattFile);
 				tmpFile = new File(pattFile);

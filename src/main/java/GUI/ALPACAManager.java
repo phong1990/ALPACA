@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.text.Document;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -56,6 +57,9 @@ public class ALPACAManager {
 
 	}
 
+	public String getLogContent() {
+		return mainGUI.textLog.getText();
+	}
 	public static ALPACAManager getInstance() {
 		if (instance == null)
 			instance = new ALPACAManager();
