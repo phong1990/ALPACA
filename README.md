@@ -47,13 +47,19 @@ Minimum requirement
 
 ![Step 5.1](https://github.com/phong1990/ALPACA/blob/master/res/img/step4.png)
 
+Expanded topic words
+
 ![Step 5.2](https://github.com/phong1990/ALPACA/blob/master/res/img/step4-words.png)
+
+Expanded topic descriptions
 
 ![Step 5.3](https://github.com/phong1990/ALPACA/blob/master/res/img/step4-description.png)
 
 6. Expanding Intent Pattern (RECOMMENDED): This option is not required, but it would greatly improve the result of ALPACA by expanding your patterns using the data from your reviews. There are two default intentions: Requests and Complaints. However, you can make your own patterns as in our comparison.csv example in the running package. The pattern format has to contain at least a functional word (like the words in ALPACARunningPackage\dictionary\baseWord\misc\) and at least a POS tag (from  [Penn Tree Bank site](https://catalog.ldc.upenn.edu/docs/LDC99T42/tagguid1.pdf) ). You can define different intentions based on your interest and find more similar patterns from you data. Remember to set your threshold of how similar the patterns need to be to the original patterns.
 
 ![Step 6](https://github.com/phong1990/ALPACA/blob/master/res/img/step5.png)
+
+The mined patterns:
 
 ![Step 6patt](https://github.com/phong1990/ALPACA/blob/master/res/img/patterms.png)
 
