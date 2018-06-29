@@ -38,7 +38,9 @@ public class PreprocessingGUI extends JDialog {
         super(aFrame, true);
 		this.setTitle("Pre-process data");
 		word2vecCheckBox = new JCheckBox("Training word2vec model (you can add additional text file ->)");
+		word2vecCheckBox.setSelected(true);
 		potentialPattCheckBox = new JCheckBox("Extracting potential patterns (can be VERY slow)");
+		potentialPattCheckBox.setSelected(true);
 		addfileLocation = new JTextField();
 		addfileLocation.setPreferredSize(new Dimension(200, 20));
 		CustomFileDirChooser additionalTextFileChooser = new CustomFileDirChooser(addfileLocation, null, false,aFrame, true,null);
