@@ -20,7 +20,8 @@ Minimum requirement
 ## Installation
 1. Download the running package file ([ALPACARunningPackage.zip](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/87732c699dbb1c3f65232f9b69cfe77663f1f808/ExAssist.zip))
 2. Unzip the package.
-7. Run ALPACA.jar (no installation required)
+3. Run ALPACA.jar (no installation required)
+4. (OPTIONAL) download 3 millions reviews. (Link available soon)
 ## Usage
 ### Extracting opinions
 1a. If you have the folder that contains compatible data for ALPACA, you can choose it as your "Data Folder"
@@ -94,3 +95,6 @@ This is how the final results should look like:
 8. \dictionary\config.ini: this file is for locating the dictionary folder in ALPACA. You need to change the path inside to the correct location in your computer.
 9. \aditionalText: this is the processed text of 3 millions reviews. You can use it as a supplement text corpus for training word2vec for your data if you don't have too many reviews. It helps the deeplearning process understand the relationships between words better in the context of mobile app. Therefore, the more reviews you have, the better ALPACA will be able to understand it.
 10. \replication: this has around 13k reviews of Magic Tiles to replicate our experiments and for demonstrate the usage of ALPACA. You can use it to learn how to use our tool.
+
+## Citation instructions
+<Available soon>
