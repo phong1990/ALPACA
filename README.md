@@ -18,32 +18,45 @@ Contact: lenniel@auburn.edu (Phong Vu)
 ## Usage
 ### Extracting opinions
 1a. If you have the folder that contains compatible data for ALPACA, you can choose it as your "Data Folder"
+
 ![Step 1](https://github.com/phong1990/ALPACA/blob/master/res/img/step1.png)
+
 1b. If you only have raw review data, first you will need to convert it into our .csv format (UTF-8, default separator). An example of the csv file can be found in the running package. Click on the "Import CSV" button to import it to an empty data folder of your choice. You only have to import once, next time you only need step 1a.
+
 ![Step 1b](https://github.com/phong1990/ALPACA/blob/master/res/img/step1-data.png)
 
 2. Now that you have the data folder, you will need to provide the config file for the Text Normalizer module. This config file will apply debug mode and direct ALPACA to the correct location of the dictionary folder in your computer. An example of the config file is inside the dictionary folder of our running package. You will need to change the directory path in there before running ALPACA.
+
 ![Step 2](https://github.com/phong1990/ALPACA/blob/master/res/img/step2.png)
 
 3. Preprocessing: This step is required for ALPACA to analyze your data, and only needed to be done once. Please choose both word2vec training and pattern learning unless you know what you are doing (e.g. you have a better word2vec file from somewhere else, or you provide your own patterns). The artifacts produced by those options are vital to the next steps.
+
 ![Step 3](https://github.com/phong1990/ALPACA/blob/master/res/img/step3.png)
 
 4. Extrating Keywords: This is straight forward. The result is a csv file with different ranking schemas for all keywords found in your data. This is similar to keyword ranking and extraction of MARK (2016). DO NOT SKIP THIS STEP unless you know what you are doing (e.g. providing your own keyword ranking for your research)
+
 ![Step 4](https://github.com/phong1990/ALPACA/blob/master/res/img/keywords.png)
 
 5. Expanding topic (OPTIONAL): This option allow you to explore the topic you are interested about by providing keywords you think related to that topic. ALPACA will analyze those keywords, expand them into a bigger relevant set of keywords and show you the collective summary of the topic in phrase format. This result is the same as our Phrase-based tool's.
+
 ![Step 5.1](https://github.com/phong1990/ALPACA/blob/master/res/img/step4.png)
+
 ![Step 5.2](https://github.com/phong1990/ALPACA/blob/master/res/img/step4-words.png)
+
 ![Step 5.3](https://github.com/phong1990/ALPACA/blob/master/res/img/step4-description.png)
 
 6. Expanding Intent Pattern (RECOMMENDED): This option is not required, but it would greatly improve the result of ALPACA by expanding your patterns using the data from your reviews. There are two default intentions: Requests and Complaints. However, you can make your own patterns as in our comparison.csv example in the running package. The pattern format has to contain at least a functional word (like the words in ALPACARunningPackage\dictionary\baseWord\misc\) and at least a POS tag (from  [Penn Tree Bank site](https://catalog.ldc.upenn.edu/docs/LDC99T42/tagguid1.pdf) ). You can define different intentions based on your interest and find more similar patterns from you data. Remember to set your threshold of how similar the patterns need to be to the original patterns.
+
 ![Step 6](https://github.com/phong1990/ALPACA/blob/master/res/img/step5.png)
+
 ![Step 6patt](https://github.com/phong1990/ALPACA/blob/master/res/img/patterms.png)
 
 7. Extracting opinions: An opinion is a phrase that match an intention pattern and describe the topic of interest. You can import the keywords set from step 5 and the pattern set expanded on step 6 (or use our default intentions, but the results will not be as good since ALPACA is data-driven). Please remember to choose a threshold for this step as it would directly affect the final result. The result is an .html file with all the opinions found.
+
 ![Step 7](https://github.com/phong1990/ALPACA/blob/master/res/img/step6.png)
 
 This is how the final results should look like:
+
 ![result](https://github.com/phong1990/ALPACA/blob/master/res/img/results.png)
 
 
