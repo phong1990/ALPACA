@@ -11,6 +11,12 @@ Contact: lenniel@auburn.edu (Phong Vu)
 
 ## Introduction
 **ALPACA** is a tool for extracting user opinions from app review using topics and intentions. It has some of the core functions of MARK (2016) and Phrase-based (2017) tools, while also providing a new novel function to extract opinions.
+## System requirement
+Minimum requirement
+  Windows 7 (Windows 10 is bad for datamining in general)
+  RAM: 12gb (more ram if you plan to run more than 3 millions reviews)
+  CPU: intel i5
+  
 ## Installation
 1. Download the running package file ([ALPACARunningPackage.zip](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/87732c699dbb1c3f65232f9b69cfe77663f1f808/ExAssist.zip))
 2. Unzip the package.
