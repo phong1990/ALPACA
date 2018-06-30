@@ -4,7 +4,7 @@ Copyright (C) 2017-2018 SIS Lab, Auburn University
 
 This program is free software. 
 
-Contact: lenniel@auburn.edu (Phong Vu)
+Contact: lenniel@auburn.edu (Phong Vu - Auburn University)
   
 (Video demo)
 * [Video Demo](https://www.youtube.com/watch?v=UNw573qtEpw)
