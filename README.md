@@ -6,8 +6,12 @@ This program is free software.
 
 Contact: lenniel@auburn.edu (Phong Vu)
   
-
+(Video demo)
 * [Video Demo](https://www.youtube.com/watch?v=UNw573qtEpw)
+(Results - view by downloading the html file and run it with your browser)
+* [examples result 1](https://github.com/phong1990/ALPACA/blob/master/res/examples/request_songs_moderate.html)
+* [examples result 2](https://github.com/phong1990/ALPACA/blob/master/res/examples/complaint_songs_moderate.html)
+* [examples result 3](https://github.com/phong1990/ALPACA/blob/master/res/examples/request_songs_flexible.html)
 
 ## Introduction
 **ALPACA** is a tool for extracting user opinions from app review using topics and intentions. It has some of the core functions of MARK (2016) and Phrase-based (2017) tools, while also providing a new novel function to extract opinions.
