@@ -22,7 +22,7 @@ Minimum requirement
 2. Unzip the package.
 3. Run ALPACA.jar (no installation required)
 4. (OPTIONAL) download 3 millions reviews. (Link available soon) (see citation instruction 2)
-5. (OPTIONAL) download custom intention patterns. [Comparison](https://github.com/phong1990/ALPACA/blob/master/res/seedPatterns/newComparisons.csv)
+5. (OPTIONAL) download custom intention patterns. [Comparison Intention](https://github.com/phong1990/ALPACA/blob/master/res/seedPatterns/newComparisons.csv)
 ## Usage
 ### Extracting opinions
 1a. If you have the folder that contains compatible data for ALPACA, you can choose it as your "Data Folder"
