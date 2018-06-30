@@ -31,7 +31,7 @@ Minimum requirement
 1. Download the running package file ([ALPACARunningPackage.zip](http://www.mediafire.com/file/cl3lu0k75kxl344/ALPACARunningPackage.zip))
 2. Unzip the package.
 3. Run ALPACA.jar (no installation required)
-4. (OPTIONAL) download 3 millions reviews. (Link available soon) (see citation instruction 2)
+4. (OPTIONAL) download 3 millions reviews. (([ALPACARunningPackage.zip](http://www.mediafire.com/file/5a9s7858azv8ypk/REVIEWDATA_MARK.zip))) (see citation instruction 2)
 5. (OPTIONAL) download custom intention patterns. [Comparison Intention](https://github.com/phong1990/ALPACA/blob/master/res/seedPatterns/newComparisons.csv)
 ## Usage
 ### Extracting opinions
