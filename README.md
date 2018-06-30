@@ -18,10 +18,11 @@ Minimum requirement
   CPU: intel i5
   
 ## Installation
-1. Download the running package file ([ALPACARunningPackage.zip](https://bitbucket.org/tamnguyenthe/exassist_repo/raw/87732c699dbb1c3f65232f9b69cfe77663f1f808/ExAssist.zip))
+1. Download the running package file ([ALPACARunningPackage.zip](http://www.mediafire.com/file/cl3lu0k75kxl344/ALPACARunningPackage.zip))
 2. Unzip the package.
 3. Run ALPACA.jar (no installation required)
 4. (OPTIONAL) download 3 millions reviews. (Link available soon)
+5. (OPTIONAL) download custom intention patterns. (Link Available soon)
 ## Usage
 ### Extracting opinions
 1a. If you have the folder that contains compatible data for ALPACA, you can choose it as your "Data Folder"
