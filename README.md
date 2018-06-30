@@ -14,6 +14,10 @@ Contact: lenniel@auburn.edu (Phong Vu - Auburn University)
 * [examples result 2](https://github.com/phong1990/ALPACA/blob/master/res/examples/complaint_songs_moderate.html)
 * [examples result 3](https://github.com/phong1990/ALPACA/blob/master/res/examples/request_songs_flexible.html)
 
+(Tool and technical paper - in the work, but you can read it for technical reference)
+*[Tool paper](https://github.com/phong1990/ALPACA/blob/master/res/papers/ALPACA-tool-v1.pdf)
+*[Technical Paper](https://github.com/phong1990/ALPACA/blob/master/res/papers/mining-user-opinions-WORK_IN_PROGRESS.pdf)
+
 ## Introduction
 **ALPACA** is a tool for extracting user opinions from app review using topics and intentions. It has some of the core functions of MARK (2016) and Phrase-based (2017) tools, while also providing a new novel function to extract opinions.
 ## System requirement
