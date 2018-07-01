@@ -17,6 +17,7 @@ Contact: lenniel@auburn.edu (Phong Vu - Auburn University)
 (Tool and technical paper - in the work, but you can read it for technical reference)
 * [Tool paper](https://github.com/phong1990/ALPACA/blob/master/res/papers/ALPACA-tool-v1.pdf)
 * [Technical Paper](https://github.com/phong1990/ALPACA/blob/master/res/papers/mining-user-opinions-WORK_IN_PROGRESS.pdf)
+* [Poster at ISCE'18](ALPACA-advanced linguistic pattern and concept analysis framework for software engineering corpora)
 
 
 ## Introduction
