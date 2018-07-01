@@ -28,7 +28,7 @@ Minimum requirement
   CPU: intel i5
   
 ## Installation
-1. Download the running package file ([ALPACARunningPackage.zip](http://www.mediafire.com/file/cl3lu0k75kxl344/ALPACARunningPackage.zip))
+1. Download the running package file ([ALPACARunningPackage.zip](https://drive.google.com/open?id=15vsTIBb1M3IGIRMZe6aA9mZlGv_PyjVs))
 2. Unzip the package.
 3. Run ALPACA.jar (no installation required)
 4. (OPTIONAL) download 3 millions reviews. ([ALPACARunningPackage.zip](http://www.mediafire.com/file/5a9s7858azv8ypk/REVIEWDATA_MARK.zip)) (see citation instruction 2)
