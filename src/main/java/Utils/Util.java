@@ -2,7 +2,10 @@ package Utils;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
@@ -11,8 +14,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -31,6 +40,64 @@ public class Util {
 			}
 		});
 		return filePaths;
+	}
+
+	/**
+	 * Export a resource embedded into a Jar file to the local file path.
+	 *
+	 * @param resourceName
+	 *            ie.: "/SmartLibrary.dll"
+	 * @return The path to the exported resource
+	 * @throws Exception
+	 */
+	static public String ExportResource(String resourceName, String outFolder) throws Exception {
+		InputStream stream = null;
+		OutputStream resStreamOut = null;
+		try {
+			stream = Util.class.getResourceAsStream(resourceName);// note that each / is a directory down in the "jar
+																	// tree" been the jar the root of the tree
+			if (stream == null) {
+				throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
+			}
+
+			int readBytes;
+			byte[] buffer = new byte[4096];
+			resStreamOut = new FileOutputStream(outFolder +"/" + resourceName);
+			while ((readBytes = stream.read(buffer)) > 0) {
+				resStreamOut.write(buffer, 0, readBytes);
+			}
+		} catch (Exception ex) {
+			throw ex;
+		} finally {
+			stream.close();
+			resStreamOut.close();
+		}
+
+		return outFolder +"/" + resourceName;
+	}
+
+	public static Map<String, Double> sortByComparator(Map<String, Double> unsortMap, final boolean order) {
+
+		List<Entry<String, Double>> list = new LinkedList<Entry<String, Double>>(unsortMap.entrySet());
+
+		// Sorting the list based on values
+		Collections.sort(list, new Comparator<Entry<String, Double>>() {
+			public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+				if (order) {
+					return o1.getValue().compareTo(o2.getValue());
+				} else {
+					return o2.getValue().compareTo(o1.getValue());
+
+				}
+			}
+		});
+		// Maintaining insertion order with the help of LinkedList
+		Map<String, Double> sortedMap = new LinkedHashMap<String, Double>();
+		for (Entry<String, Double> entry : list) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+
+		return sortedMap;
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */

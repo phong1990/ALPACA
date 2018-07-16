@@ -47,14 +47,20 @@ public class SearchEngine {
 				String rawText = doc.readRawTextFromDirectory(data.getDirectory());
 				// if(highlightedPosition[1]+1 == rawText.length())
 				// System.err.println(highlightedPosition[1] +"_" +rawText.length());
-				String highlighted = rawText.substring(0, highlightedPosition[0]) + "<mark>"
-						+ rawText.substring(highlightedPosition[0], highlightedPosition[1] + 1) + "</mark>";
-				if (highlightedPosition[1] + 1 < rawText.length())
-					highlighted += rawText.substring(highlightedPosition[1] + 1);
-				
-				HTMLOutput.FinalResult res = new HTMLOutput.FinalResult(highlighted, df.format(doc.getTime()), doc.getRating());
-				printableResults.add(res);
-				//pw.println(highlighted);
+				try {
+					String highlighted = rawText.substring(0, highlightedPosition[0]) + "<mark>"
+							+ rawText.substring(highlightedPosition[0], highlightedPosition[1] + 1) + "</mark>";
+					if (highlightedPosition[1] + 1 < rawText.length())
+						highlighted += rawText.substring(highlightedPosition[1] + 1);
+
+					HTMLOutput.FinalResult res = new HTMLOutput.FinalResult(highlighted, df.format(doc.getTime()),
+							doc.getRating());
+					printableResults.add(res);
+				} catch (java.lang.StringIndexOutOfBoundsException e) {
+					// TODO: remember to fix this
+					System.out.println("WARNING: can't map this sentence: " +rawText);
+				}
+				// pw.println(highlighted);
 				double newPercentage = Util.round(100 * docCompleted / totalDoc, 2);
 				if (newPercentage > percentageCompleted) {
 					percentageCompleted = newPercentage;

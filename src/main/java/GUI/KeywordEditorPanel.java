@@ -36,6 +36,11 @@ public class KeywordEditorPanel extends JPanel {
 	protected JTextField wordfileLocation = null;
 	private JLabel noticeLabel = null;
 	JFrame aframe;
+	public void setEnabled(boolean enabled) {
+		editor.setEnabled(enabled);
+		importWordsButton.setEnabled(enabled);
+		wordfileLocation.setEnabled(enabled);
+	}
 	public KeywordEditorPanel(JTextArea keywordEditor, JLabel noticeLabe, JFrame frame) {
 		aframe = frame;
 		this.noticeLabel = noticeLabe;
@@ -145,7 +150,7 @@ public class KeywordEditorPanel extends JPanel {
 		this.add(editorPanel);
 		this.add(midPanel);
 		this.add(kwFilePanel);
-		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Keywords of topic"),
+		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Keywords"),
 				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		// Lay out the panel.
 		SpringUtilities.makeCompactGrid(this, 1, 3, // rows, cols

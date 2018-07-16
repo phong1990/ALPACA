@@ -371,16 +371,22 @@ public class TrendAnalyzer {
 			for (String sequence : topicSequences) {
 				int firstIndex = sentence.indexOf(sequence);
 				if (firstIndex != -1) {
-					int lastIndex = firstIndex+ sequence.length()-1;
+					int lastIndex = firstIndex + sequence.length() - 1;
 					int[] indicePair = calculateWordIndexInSentence(sentence, firstIndex, lastIndex);
-					if(indicePair[1] == -1)
+					if (indicePair[1] == -1)
 						continue; // not an actual word to word match
-					else{
-						DBWord firstWord = voc.getWordFromDB(sen[indicePair[0]]);
-						DBWord lastWord = voc.getWordFromDB(sen[indicePair[1]]);
-						int stop = lastWord.getLastPositionInOriginalText();
-						int start = firstWord.getFirstPositionInOriginalText();
-						return new int[] {start,stop};
+					else {
+						try {
+							DBWord firstWord = voc.getWordFromDB(sen[indicePair[0]]);
+							DBWord lastWord = voc.getWordFromDB(sen[indicePair[1]]);
+							int stop = lastWord.getLastPositionInOriginalText();
+							int start = firstWord.getFirstPositionInOriginalText();
+							return new int[] { start, stop };
+						} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+							// TODO: handle exception
+							System.out.println("WARNING: Trend Analysis 387 unknown error, will fix it later");
+							return null;
+						}
 					}
 					// return true;
 				}
@@ -402,33 +408,35 @@ public class TrendAnalyzer {
 	}
 
 	// this this return a -1 for last word index then there is no actual match
-	private static int[] calculateWordIndexInSentence(final CharSequence  sentence, int firstLocation, int lastLocation) {
+	private static int[] calculateWordIndexInSentence(final CharSequence sentence, int firstLocation,
+			int lastLocation) {
 		int firstWordIndex = 0;
-		int lastWordIndex = -1; 
-		if(sentence.length() < 2)
-			return new int[] {firstWordIndex,lastWordIndex};
-		int[] spaceLocationsArray = new int[sentence.length()/2];
+		int lastWordIndex = -1;
+		if (sentence.length() < 2)
+			return new int[] { firstWordIndex, lastWordIndex };
+		int[] spaceLocationsArray = new int[sentence.length() / 2];
 		int spaceLocationIndex = 0;
 		// get an array of location of space between words.
 		for (int i = 0; i < sentence.length(); i++) {
 			final char c = sentence.charAt(i);
-			if (c==' ') {
+			if (c == ' ') {
 				spaceLocationsArray[spaceLocationIndex++] = i;
 			}
 		}
-		for(int i = 0; i <spaceLocationsArray.length; i++) {
+		for (int i = 0; i < spaceLocationsArray.length; i++) {
 			if ((spaceLocationsArray[i] + 1) == firstLocation) {
-			  firstWordIndex = i+1;
+				firstWordIndex = i + 1;
 			}
 			// in case the querry has no space at the end
-			if((spaceLocationsArray[i] - 1) == lastLocation)
+			if ((spaceLocationsArray[i] - 1) == lastLocation)
 				lastWordIndex = i;
 			// in case the querry has a space at the end
-			if((spaceLocationsArray[i]) == lastLocation)
+			if ((spaceLocationsArray[i]) == lastLocation)
 				lastWordIndex = i;
 		}
-		return new int[] {firstWordIndex,lastWordIndex};
+		return new int[] { firstWordIndex, lastWordIndex };
 	}
+
 	// as long as the document mention this topic somewhere, it returns true
 	public static boolean containsTopic(Set<String> topic1Grams, Set<String> topic2Grams, Set<String> topic3Grams,
 			int[][] sentences, Vocabulary voc) throws UnsupportedEncodingException, SQLException, IOException {

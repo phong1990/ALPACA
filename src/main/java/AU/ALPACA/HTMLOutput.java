@@ -98,9 +98,9 @@ public class HTMLOutput {
 
 	public static class FinalResult {
 
-		private String reviewText;
-		private String time;
-		private int rating;
+		public String reviewText;
+		public String time;
+		public int rating;
 
 		public FinalResult(String review, String time, int rating) {
 			this.reviewText = review;

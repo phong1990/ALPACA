@@ -22,6 +22,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.text.Document;
 
+import org.bytedeco.javacpp.RealSense.context;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -32,13 +34,17 @@ import Analyzers.ExpandPatterns;
 import Analyzers.ExtractCommonPatterns;
 import Analyzers.KeywordAnalyzer;
 import Analyzers.KeywordExplorer;
+import Analyzers.MARKClusterAnalyzer;
 import Analyzers.PhraseAnalyzer;
 import Analyzers.SearchEngine;
 import Datastores.Dataset;
 import Datastores.FileDataAdapter;
+import NLP.NatureLanguageProcessor;
 import NLP.WordVec;
 import TextNormalizer.TextNormalizer;
+import Utils.POSTagConverter;
 import Utils.Util;
+import Vocabulary.Vocabulary;
 
 public class ALPACAManager {
 	public static boolean Kill_Switch = false;
@@ -60,6 +66,7 @@ public class ALPACAManager {
 	public String getLogContent() {
 		return mainGUI.textLog.getText();
 	}
+
 	public static ALPACAManager getInstance() {
 		if (instance == null)
 			instance = new ALPACAManager();
@@ -135,6 +142,8 @@ public class ALPACAManager {
 							pattDir + "rawPattern.csv", true, null, null);
 					System.out.println(">>Done with template extraction.");
 				}
+				// analyze keywords too
+				analyzeKeywords();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -169,12 +178,14 @@ public class ALPACAManager {
 			try {
 				if (currentDataset == null)
 					currentDataset = Alpaca.readProcessedData(dataDirectory, PreprocesorMain.LV2_ROOTWORD_STEMMING);
+				System.out.println(">> Start extracting keywords and ranking...");
 				KeywordAnalyzer analyzer = new KeywordAnalyzer();
 				String outputFilename = FileDataAdapter.getLevelLocationDir("wordScore/", currentDataset.getDirectory(),
 						PreprocesorMain.LV2_ROOTWORD_STEMMING);
 				analyzer.calculateAndWriteKeywordScore(currentDataset, PreprocesorMain.LV2_ROOTWORD_STEMMING, true,
 						outputFilename);
-				Util.openFile(outputFilename + "score.csv");
+
+				System.out.println(">> Done extracting keywords and ranking to: " + outputFilename + "score.csv");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -273,6 +284,19 @@ public class ALPACAManager {
 		return IDFWeights;
 	}
 
+	public String[] readRankingSchemas() throws IOException {
+		String wordScoreFile = FileDataAdapter.getLevelLocationDir("wordScore/", dataDirectory,
+				PreprocesorMain.LV2_ROOTWORD_STEMMING) + "score.csv";
+		CSVReader reader = new CSVReader(new FileReader(wordScoreFile), ',', CSVWriter.DEFAULT_ESCAPE_CHARACTER);
+		String[] line = reader.readNext();
+		String[] rankings = new String[line.length - 1];
+		for (int i = 1; i < line.length; i++) {
+			rankings[i - 1] = line[i];
+		}
+		reader.close();
+		return rankings;
+	}
+
 	public void startKeywordExpandingThread(Set<String> words, String outDir) {
 		// Create a thread to run preprocessing in
 		Thread t1 = new Thread(new Runnable() {
@@ -284,23 +308,6 @@ public class ALPACAManager {
 				if (Kill_Switch == true) {
 					Kill_Switch = false;
 					System.out.println(">>>>>>>>>>Topic Expansion task was canceled successfully<<<<<<<<<<");
-				}
-			}
-		});
-		t1.start();
-	}
-
-	public void startKeywordAnalysingThread() {
-		// Create a thread to run preprocessing in
-		Thread t1 = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				mainGUI.enableAllFunction(false);
-				analyzeKeywords();
-				mainGUI.enableAllFunction(true);
-				if (Kill_Switch == true) {
-					Kill_Switch = false;
-					System.out.println(">>>>>>>>>>Keyword Analyzing task was canceled successfully<<<<<<<<<<");
 				}
 			}
 		});
@@ -488,13 +495,140 @@ public class ALPACAManager {
 				mainGUI.enableAllFunction(false);
 				boolean successful = populateDataFolder(csvFile, outFolder);
 				if (successful) {
-					//mainGUI.enableAllFunction(true);
+					// mainGUI.enableAllFunction(true);
 					mainGUI.dataFolderTextField.setText(outFolder);
 					mainGUI.enableBasicFunctions(true);
 				}
 				if (Kill_Switch == true) {
 					Kill_Switch = false;
 					System.out.println(">>>>>>>>>>Opinion Extraction task was canceled successfully<<<<<<<<<<");
+				}
+			}
+
+		});
+		t1.start();
+	}
+
+	private void clusterTopics(String rankingType, int topNumber, String outFolder) {
+		// TODO Auto-generated method stub
+		// read the file with the correct type of ranking
+		if (currentDataset == null)
+			try {
+				currentDataset = Alpaca.readProcessedData(dataDirectory, PreprocesorMain.LV2_ROOTWORD_STEMMING);
+				String wordScoreFile = FileDataAdapter.getLevelLocationDir("wordScore/", dataDirectory,
+						PreprocesorMain.LV2_ROOTWORD_STEMMING) + "score.csv";
+				Map<String, Double> keywords = new HashMap<>();
+				Set<String> stopWords = NatureLanguageProcessor.getInstance().getStopWordSet();
+				Vocabulary voc = currentDataset.getVocabulary();
+				int NN = POSTagConverter.getInstance().getCode("NN");
+				int VB = POSTagConverter.getInstance().getCode("VB");
+				try {
+					CSVReader reader = new CSVReader(new FileReader(wordScoreFile), ',',
+							CSVWriter.DEFAULT_ESCAPE_CHARACTER);
+					String[] line = reader.readNext();
+					int schema = -1;
+					for (int i = 0; i < line.length; i++) {
+						if (rankingType.equalsIgnoreCase(line[i]))
+							schema = i;
+					}
+					if (schema == -1) {
+						System.out.println(">> ERROR: Can't find the collumn '" + rankingType
+								+ "' in the keyword file at: " + wordScoreFile + "score.csv");
+						reader.close();
+						return;
+					}
+					while ((line = reader.readNext()) != null) {
+						if (stopWords.contains(line[0]))
+							continue;
+						// only take in NN and VB, remove all other (because this is MARK)
+						List<Integer> wordIDs = voc.getWordIDs(line[0]);
+						for (int ID : wordIDs) {
+							int POSid = voc.getWordFromDB(ID).getPOS();
+							if (POSid == NN || POSid == VB) {
+								double score = Double.valueOf(line[schema]);
+								//double idf = Double.valueOf(line[KeywordAnalyzer.TFIDF]);
+								// wordScore.put(line[0], score);
+								keywords.put(line[0], score);
+								break;
+							}
+						}
+					}
+					reader.close();
+				} catch (IOException e) {
+					System.out.println(">>ERROR: there is no keyword file at:" + wordScoreFile + "score.csv");
+					return;
+				} catch (ArrayIndexOutOfBoundsException xe) {
+
+					System.out.println(">>ERROR: can't read the file at:" + wordScoreFile + "score.csv");
+					return;
+				}
+				if (keywords.isEmpty()) {
+					System.out.println("ERROR: There is no keyword in collumn '" + rankingType
+							+ "' in the keyword file at: " + wordScoreFile + "score.csv");
+					return;
+				}
+				keywords = Util.sortByComparator(keywords, true);
+				Set<String> wordList = new HashSet<>();
+				for (String word : keywords.keySet()) {
+					wordList.add(word);
+					if (wordList.size() == topNumber)
+						break;
+				}
+				WordVec word2vec = new WordVec(FileDataAdapter.getLevelLocationDir("word2vec", dataDirectory,
+						PreprocesorMain.LV2_ROOTWORD_STEMMING) + "vectors.txt");
+				MARKClusterAnalyzer.clusterByWordsList(wordList, word2vec, outFolder, currentDataset,
+						dataDirectory + "metadata.csv");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+
+	private void clusterTopics(Set<String> words, String outFolder) {
+		if (currentDataset == null)
+			try {
+				currentDataset = Alpaca.readProcessedData(dataDirectory, PreprocesorMain.LV2_ROOTWORD_STEMMING);
+				WordVec word2vec = new WordVec(FileDataAdapter.getLevelLocationDir("word2vec", dataDirectory,
+						PreprocesorMain.LV2_ROOTWORD_STEMMING) + "vectors.txt");
+				MARKClusterAnalyzer.clusterByWordsList(words, word2vec, outFolder, currentDataset,
+						dataDirectory + "metadata.csv");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+
+	public void startClusteringWordsThread(String rankingType, int topNumber, String outFolder) {
+		// TODO Auto-generated method stub
+		// Create a thread to run preprocessing in
+		Thread t1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				mainGUI.enableAllFunction(false);
+				clusterTopics(rankingType, topNumber, outFolder);
+				mainGUI.enableAllFunction(true);
+				if (Kill_Switch == true) {
+					Kill_Switch = false;
+					System.out.println(">>>>>>>>>>Keywords Clustering task was canceled successfully<<<<<<<<<<");
+				}
+			}
+
+		});
+		t1.start();
+	}
+
+	public void startClusteringWordsThread(Set<String> words, String outFolder) {
+		// TODO Auto-generated method stub
+		// Create a thread to run preprocessing in
+		Thread t1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				mainGUI.enableAllFunction(false);
+				clusterTopics(words, outFolder);
+				mainGUI.enableAllFunction(true);
+				if (Kill_Switch == true) {
+					Kill_Switch = false;
+					System.out.println(">>>>>>>>>>Keywords Clustering task was canceled successfully<<<<<<<<<<");
 				}
 			}
 

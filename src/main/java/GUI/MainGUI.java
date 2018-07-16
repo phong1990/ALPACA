@@ -61,6 +61,7 @@ public class MainGUI extends JPanel implements ActionListener {
 	protected JButton cancelTaskButton = null;
 	protected CustomFileDirChooser dataFileChoser = null;
 	protected CustomFileDirChooser ConfigFileChoser = null;
+	protected ClusteringGUI clusteringDialog = null;
 
 	public void enableAllFunction(boolean enable) {
 		importcsvButton.setEnabled(enable);
@@ -96,6 +97,8 @@ public class MainGUI extends JPanel implements ActionListener {
 
 		preprocessingDialog = new PreprocessingGUI(aframe);
 		preprocessingDialog.pack();
+		clusteringDialog = new ClusteringGUI(aframe);
+		//clusteringDialog.pack();
 		// keywordDialog = new KeywordGUI(aframe);
 		// keywordDialog.pack();
 		patternDiaglog = new PatternGUI(aframe);
@@ -297,7 +300,7 @@ public class MainGUI extends JPanel implements ActionListener {
 		prepButton.setPreferredSize(new Dimension(180, 30));
 		JPanel panelPrep = new JPanel();
 		panelPrep.add(prepButton);
-		keywordButton = new JButton("Extract Keywords");
+		keywordButton = new JButton("Cluster Keywords");
 		keywordButton.setActionCommand(kwString);
 		keywordButton.addActionListener(this);
 		keywordButton.setEnabled(false);
@@ -391,7 +394,10 @@ public class MainGUI extends JPanel implements ActionListener {
 			if (!tmpFile.exists() || !tmpFile.isDirectory()) {
 				actionLabel.setText("Notice: please select data folder file location");
 			} else {
-				ALPACAManager.getInstance().startKeywordAnalysingThread();
+				clusteringDialog.setLocationRelativeTo(this);
+				clusteringDialog.setComboBox();
+				clusteringDialog.pack();
+				clusteringDialog.setVisible(true);
 			}
 
 			break;
