@@ -29,6 +29,7 @@ public class MainGUI extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
+	private static final String version = "2.0";
 	private static final boolean DEBUG = false;
 	private static final long serialVersionUID = -6213851010100668003L;
 	protected static final String DataFolderString = "DataFolder";
@@ -458,7 +459,7 @@ public class MainGUI extends JPanel implements ActionListener {
 	 */
 	public static MainGUI createAndShowGUI() {
 		// Create and set up the window.
-		JFrame frame = new JFrame("ALPACA");
+		JFrame frame = new JFrame("ALPACA v."+version);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainGUI mainGUI = new MainGUI(frame);
 		// Add content to the window.
