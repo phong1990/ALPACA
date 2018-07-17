@@ -11,6 +11,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,6 +52,15 @@ public class TimeAnalyzer {
 		Util.openFile(outFolder);
 	}
 
+	public static void writeTimeSeriesForWordSet(String outDir, Set<String> phrases, String metadataFile, Set<String> seeds, Dataset dataset)
+			throws UnsupportedEncodingException, SQLException, IOException {
+		// TODO Auto-generated method stub
+		String[] listOfDays = getListOfDaysFromStartToEnd(metadataFile);
+		Map<String, Map<String, Integer>> dateNcountOfWords = countTheWords(metadataFile,seeds, dataset, listOfDays);
+		StringBuilder chartData = getTimeserries(seeds, dateNcountOfWords, listOfDays);
+		List<HTMLOutput.FinalResult> results = SearchEngine.search(dataset, phrases);
+		writeToFile(outDir, new ArrayList<String>(seeds), chartData, results);
+	}
 	private static void writeToFile(String outFolder, List<String> words, StringBuilder chartData,
 			List<HTMLOutput.FinalResult> results) {
 		// copy the required amchart files into this folder
@@ -312,5 +323,7 @@ public class TimeAnalyzer {
 
 		return avr;
 	}
+
+
 
 }

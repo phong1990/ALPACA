@@ -40,7 +40,7 @@ public class KeywordExplorer {
 	// static Map<String, Double> pairSimiliarity = new HashMap<>();
 	public static Set<String> expand(Collection<String> wordList, WordVec word2vec,
 			Dataset dataset, double thresholdPatterns, Double thresholdTopic,
-			Map<String, Double> IDFWeights, String structureTemplatesFile, Set<String[]> POSpatternsOfInterest, String outDir) throws Throwable {
+			Map<String, Double> IDFWeights, String structureTemplatesFile, Set<String[]> POSpatternsOfInterest, String outDir,String metadataFile) throws Throwable {
 		if (thresholdTopic != null)
 			SIM_THRESHOLD = thresholdTopic;
 		else
@@ -90,6 +90,7 @@ public class KeywordExplorer {
 				pw.close();
 		}
 
+		TimeAnalyzer.writeTimeSeriesForWordSet(outDir, results, metadataFile,seeds, dataset);
 		System.out.println(">>done printing to " +outDir);
 
 

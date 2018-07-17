@@ -259,7 +259,7 @@ public class ALPACAManager {
 			}
 			Set<String[]> POSpatternsOfInterest = PhraseAnalyzer.getPOSpatterns(pattFile);
 			Set<String> result = KeywordExplorer.expand(words, word2vec, currentDataset, 0.7, 0.7, IDFWeights, pattFile,
-					POSpatternsOfInterest, outDir);
+					POSpatternsOfInterest, outDir,dataDirectory + "metadata.csv");
 			System.out.println();
 			// open the folder
 			Util.openFile(outDir);

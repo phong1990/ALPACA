@@ -521,34 +521,34 @@ public class Alpaca {
 	}
 
 	//@Command(description = "expand words from a topic to phrases", name = "expand", abbrev = "expt")
-	public void expandWords_topic(String... args) throws Throwable {
-		List<String> words = wordTopics.get(args[0]);
-		if (words == null) {
-			System.out.println("You haven't defined this topic yet!");
-			return;
-		}
-		if (word2vec == null) {
-			System.out.println("you have to set up a vector file first!");
-			return;
-		}
-		if (args.length == 2)
-			setupThreshold(Double.parseDouble(args[1]));
-		readWordsSkewness(scoringScheme, wordScoreFile);
-		if (currentDataset == null)
-			currentDataset = Alpaca.readProcessedData(dataDirectory,
-					currentLevel);
-
-		// NOTICE: Replace this with actual pattern content before it can be used
-		String outDir="";
-		String intentPattern = "";
-		Set<String[]> POSpatternsOfInterest = PhraseAnalyzer.getPOSpatterns(intentPattern);
-		Set<String> result = KeywordExplorer.expand(words, word2vec,
-				currentDataset, optional_Similarity_Threshold, 0.8, IDFWeights,
-				"D:/projects/NewReview/Patterns/PosPatternsPanichella.csv", POSpatternsOfInterest,outDir);
-		print2Files(currentDataset, result);
-		System.out.println();
-
-	}
+//	public void expandWords_topic(String... args) throws Throwable {
+//		List<String> words = wordTopics.get(args[0]);
+//		if (words == null) {
+//			System.out.println("You haven't defined this topic yet!");
+//			return;
+//		}
+//		if (word2vec == null) {
+//			System.out.println("you have to set up a vector file first!");
+//			return;
+//		}
+//		if (args.length == 2)
+//			setupThreshold(Double.parseDouble(args[1]));
+//		readWordsSkewness(scoringScheme, wordScoreFile);
+//		if (currentDataset == null)
+//			currentDataset = Alpaca.readProcessedData(dataDirectory,
+//					currentLevel);
+//
+//		// NOTICE: Replace this with actual pattern content before it can be used
+//		String outDir="";
+//		String intentPattern = "";
+//		Set<String[]> POSpatternsOfInterest = PhraseAnalyzer.getPOSpatterns(intentPattern);
+//		Set<String> result = KeywordExplorer.expand(words, word2vec,
+//				currentDataset, optional_Similarity_Threshold, 0.8, IDFWeights,
+//				"D:/projects/NewReview/Patterns/PosPatternsPanichella.csv", POSpatternsOfInterest,outDir);
+//		print2Files(currentDataset, result);
+//		System.out.println();
+//
+//	}
 
 	//@Command(description = "expand words from a topic to phrases", name = "opinion")
 	public void findOpinions(String... args) throws Throwable {
@@ -581,38 +581,38 @@ public class Alpaca {
 	}
 
 	//@Command(description = "expand words from a file to phrases", name = "expand_from_file", abbrev = "expf")
-	public void expandWords_file(String... args) throws Throwable {
-		String realInput = variables.get(args[0]);
-		if (realInput != null)
-			args[0] = realInput;
-		if (word2vec == null) {
-			System.out.println("you have to set up a vector file first!");
-			return;
-		}
-		if (args.length == 2)
-			setupThreshold(Double.parseDouble(args[1]));
-		readWordsSkewness(scoringScheme, wordScoreFile);
-		if (currentDataset == null)
-			currentDataset = Alpaca.readProcessedData(dataDirectory,
-					currentLevel);
-		List<String> termset = new ArrayList<>();
-		Scanner scn = new Scanner(new File(args[0]));
-		while (scn.hasNext()) {
-			termset.add(scn.nextLine());
-		}
-		scn.close();
-
-		// NOTICE: Replace this with actual pattern content before it can be used
-		String outDir="";
-		String intentPattern = "";
-		Set<String[]> POSpatternsOfInterest = PhraseAnalyzer.getPOSpatterns(intentPattern);
-		Set<String> result = KeywordExplorer.expand(termset, word2vec,
-				currentDataset, optional_Similarity_Threshold, 0.8, IDFWeights,
-				"D:/projects/NewReview/Patterns/PosPatternsPanichella.csv", POSpatternsOfInterest,outDir);
-		print2Files(currentDataset, result);
-		System.out.println();
-
-	}
+//	public void expandWords_file(String... args) throws Throwable {
+//		String realInput = variables.get(args[0]);
+//		if (realInput != null)
+//			args[0] = realInput;
+//		if (word2vec == null) {
+//			System.out.println("you have to set up a vector file first!");
+//			return;
+//		}
+//		if (args.length == 2)
+//			setupThreshold(Double.parseDouble(args[1]));
+//		readWordsSkewness(scoringScheme, wordScoreFile);
+//		if (currentDataset == null)
+//			currentDataset = Alpaca.readProcessedData(dataDirectory,
+//					currentLevel);
+//		List<String> termset = new ArrayList<>();
+//		Scanner scn = new Scanner(new File(args[0]));
+//		while (scn.hasNext()) {
+//			termset.add(scn.nextLine());
+//		}
+//		scn.close();
+//
+//		// NOTICE: Replace this with actual pattern content before it can be used
+//		String outDir="";
+//		String intentPattern = "";
+//		Set<String[]> POSpatternsOfInterest = PhraseAnalyzer.getPOSpatterns(intentPattern);
+//		Set<String> result = KeywordExplorer.expand(termset, word2vec,
+//				currentDataset, optional_Similarity_Threshold, 0.8, IDFWeights,
+//				"D:/projects/NewReview/Patterns/PosPatternsPanichella.csv", POSpatternsOfInterest,outDir);
+//		print2Files(currentDataset, result);
+//		System.out.println();
+//
+//	}
 
 	//@Command(description = "preprocessing data", name = "preprocess", abbrev = "prep")
 	public void preprocessing() {
