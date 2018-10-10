@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            #myInput {
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px 12px 40px;
+                border: 2px solid #ddd;
+                margin-bottom: 12px;
+            }
+
+            #myTable {
+                border-collapse: collapse;
+                width: 100%;
+                border: 1px solid #ddd;
+                font-size: 18px;
+            }
+
+            #myTable th, #myTable td {
+                text-align: left;
+                padding: 12px;
+            }
+
+            #myTable tr {
+                border-bottom: 1px solid #ddd;
+            }
+
+            #myTable tr.header, #myTable tr:hover {
+                background-color: #f1f1f1;
+            }
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background-color: #f1f1f1;
+                color: black;
+                text-align: center;
+            } 
+            .page-wrap {
+                min-height: 100%;
+                /* equal to footer height */
+                margin-bottom: -142px; 
+            }
+            .page-wrap:after {
+                content: "";
+                display: block;
+            }
+            .footer, .page-wrap:after {
+                height: 60px; 
+            }
+        </style>
+        <title>ALPACA OPINIONS REPORT</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="page-wrap">            
+            <table class="w3-table-all w3-card-4">
+                <tr>
+                    <td style="font-weight: bold;">Topic words and phrases:</td>
+                    <td style="text-align: left;">
+song, musical, singer, artist, lover, classical, listen, tune, radio, music, genre, band, musician 
+					</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Intention:</td>
+                    <td style="text-align: left;">
+C:\Users\pmv0006\Documents\Magictiles\intentions\request.csv
+					</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;"> Level of pattern matching:</td>
+                    <td style="text-align: left;">
+Flexible Match
+					</td>
+                </tr>
+            </table>
+
+            <h1 style="text-align: center;">ALPACA Generated Report</h1>
+            <div class="search">
+                <span class="fa fa-search" style="font-size:36px"></span>
+                <input type="text" id="myInput" onkeyup="mySearchFunction()" placeholder="Search for review content.." title="Type in some content" style="width: 30%;">
+            </div>
+
+            <table class="w3-table-all w3-hoverable" id="myTable">
+                <thead>
+                    <tr>
+                        <th><a href="javascript:SortTable(0,'D','mdy');">Time</a></th>
+                        <th><a href="javascript:SortTable(1,'N');">Rating</a></th>
+                        <th>Review</th>
+                    </tr>
+                </thead>
+                <tbody>
+<tr>
+<td>07/13/2017</td>
+<td>3</td>
+<td>Can you <mark>please give me the background music name???  Its amazing</mark></td>
+</tr>
+<tr>
+<td>11/25/2017</td>
+<td>5</td>
+<td>I like <mark>it maybe add some spanish</mark></td>
+</tr>
+<tr>
+<td>09/17/2017</td>
+<td>5</td>
+<td>Can u <mark>add some hindi music in it. It</mark> will be awesome</td>
+</tr>
+<tr>
+<td>07/22/2017</td>
+<td>5</td>
+<td>I think this is more of a girl game but who am I to judge just a warning there is only love and romance songs included in this bundle of relaxing piano! If you are OK with lovey dovey <mark>sweet songs then I recommend it</mark>! But if not then I recommend tap tiles 4 😊</td>
+</tr>
+<tr>
+<td>05/18/2017</td>
+<td>5</td>
+<td>I can play an instrument. Who <mark>needs band class</mark>?</td>
+</tr>
+<tr>
+<td>06/17/2017</td>
+<td>1</td>
+<td>I personally loved it! Maybe <mark>add more songs</mark></td>
+</tr>
+<tr>
+<td>10/28/2017</td>
+<td>5</td>
+<td>Very good just <mark>add more songs</mark> like its everyday bro</td>
+</tr>
+<tr>
+<td>11/18/2017</td>
+<td>4</td>
+<td>Love it but <mark>needs more songs</mark></td>
+</tr>
+<tr>
+<td>07/13/2017</td>
+<td>4</td>
+<td>I really love <mark>this game I wish there was piano tiles</mark> 5</td>
+</tr>
+<tr>
+<td>04/15/2017</td>
+<td>4</td>
+<td>I think <mark>there should be songs</mark> that are todays hits so it more fun to play</td>
+</tr>
+<tr>
+<td>07/10/2017</td>
+<td>5</td>
+<td>Nice app...Good for relaxing ...its like a antistress app....... The thing <mark>need to improve is hip hop songs</mark></td>
+</tr>
+<tr>
+<td>10/22/2017</td>
+<td>4</td>
+<td>Pls <mark>add more of yiruma piano songs</mark></td>
+</tr>
+<tr>
+<td>06/22/2017</td>
+<td>3</td>
+<td><mark>Add more songs</mark> like (Sign of the times, Faded, Kiwi, Sweet Creature etc...)</td>
+</tr>
+<tr>
+<td>09/19/2017</td>
+<td>5</td>
+<td>Like to tap but <mark>needs more music</mark></td>
+</tr>
+<tr>
+<td>04/30/2017</td>
+<td>5</td>
+<td>I love this game but I think u <mark>should add modern songs</mark> like Ariana grande</td>
+</tr>
+<tr>
+<td>04/20/2017</td>
+<td>5</td>
+<td>It's a great game but I think you should <mark>add more songs</mark> to it</td>
+</tr>
+<tr>
+<td>07/05/2017</td>
+<td>1</td>
+<td>It seems like a rip off of Piano Tiles 2, but with laggy sound, not being <mark>able to pause. Lagging controls.   The music</mark> is fine, but constantly having it lagged like the music skips or mutes it's self.  I don't see how you can learn piano by the game...</td>
+</tr>
+<tr>
+<td>07/07/2017</td>
+<td>5</td>
+<td>I think <mark>you should put the song once I was seven year old</mark></td>
+</tr>
+<tr>
+<td>07/06/2017</td>
+<td>3</td>
+<td>You should <mark>add custom songs to play</mark></td>
+</tr>
+<tr>
+<td>09/18/2017</td>
+<td>4</td>
+<td>This game is awesome I recommend getting the app and the next update they should <mark>add   more songs</mark> and more online modes😁😁😎</td>
+</tr>
+<tr>
+<td>07/22/2017</td>
+<td>5</td>
+<td>It's super fun an addictive but it'd be better if you <mark>added more songs</mark> like Beyonce or Kpop. And during gameplay, it'd be fabulous if you guys added a pause button so that we can pause it when we need to go use the washroom,grab something, etc. But the app is really great! Keep it up!</td>
+</tr>
+<tr>
+<td>11/09/2017</td>
+<td>4</td>
+<td>This is really good but <mark>it needs some popular songs</mark></td>
+</tr>
+<tr>
+<td>06/21/2017</td>
+<td>5</td>
+<td><mark>Add some trending songs</mark></td>
+</tr>
+<tr>
+<td>09/18/2017</td>
+<td>5</td>
+<td>iTs  a really good <mark>one it needs a new fresh music</mark> like the 2017 music</td>
+</tr>
+<tr>
+<td>11/25/2017</td>
+<td>5</td>
+<td>I love the game but the company <mark>should add some Christmas songs</mark> from the radio 97.5! (THIS WAS POSTED 11-25-17)</td>
+</tr>
+<tr>
+<td>10/07/2017</td>
+<td>5</td>
+<td>Great Time Killer  It wastes my extra time in a good way, I love the music but can you <mark>plz add every day music</mark> to it</td>
+</tr>
+<tr>
+<td>04/01/2017</td>
+<td>3</td>
+<td>I like this game a whole lot. Unfortunately it feels like every other white tile tap game. Dont get me wrong i love classical music, but i feel that <mark>there should be modern music</mark> as well. Also other types of music (rock, rap, pop, country, ect.). Get the soul moving and the star ratings will jump. Not only that but you could sell new release songs for low cost of in game money that you can purchase. I know depending on the song i would buy it.</td>
+</tr>
+<tr>
+<td>05/25/2017</td>
+<td>5</td>
+<td>The thing that makes this good is the good music and quality of the songs. The multi-player just makes it even better. I just wish you would <mark>add Anime songs</mark>! Ah, that would be nice. Still a 4.5 star game without them.  Beautiful ^^</td>
+</tr>
+<tr>
+<td>09/08/2017</td>
+<td>4</td>
+<td>try to <mark>add some modern music</mark> and let people create their own songs to follow the beat to</td>
+</tr>
+<tr>
+<td>07/12/2017</td>
+<td>5</td>
+<td><mark>Add motivational song</mark> like 300 v Voilin</td>
+</tr>
+<tr>
+<td>07/25/2017</td>
+<td>5</td>
+<td>I think it is such a good game because if you like to fiddle and you need to move your fingers you can always play a song or two just can you <mark>add songs with words to it</mark> example roar from Katey Perry</td>
+</tr>
+<tr>
+<td>04/07/2017</td>
+<td>4</td>
+<td>It <mark>needs more songs</mark> and better graphics but it's really cool btw I'm addicted to it</td>
+</tr>
+<tr>
+<td>10/20/2017</td>
+<td>5</td>
+<td>The game is so cool and how it just gets faster is cool but it <mark>needs more songs</mark></td>
+</tr>
+<tr>
+<td>05/07/2017</td>
+<td>5</td>
+<td>Great music and the background, really great. Relaxing and complement the songs too good. Please <mark>add more songs</mark></td>
+</tr>
+<tr>
+<td>05/24/2017</td>
+<td>2</td>
+<td>I think you should <mark>add more songs</mark> nonfancy</td>
+</tr>
+<tr>
+<td>10/25/2017</td>
+<td>5</td>
+<td>It was cool but it <mark>need more songs</mark></td>
+</tr>
+<tr>
+<td>11/13/2017</td>
+<td>5</td>
+<td>You need to <mark>add "build our machine" to the music</mark>😉</td>
+</tr>
+<tr>
+<td>07/15/2017</td>
+<td>2</td>
+<td>I think that everything needs Wi-Fi to load fast on this game but not all people have that. So you should not let this app run with Wi-Fi. Oh and you should <mark>add more songs</mark> like 2016 to 2017 songs.</td>
+</tr>
+<tr>
+<td>11/25/2017</td>
+<td>5</td>
+<td>Well should <mark>add more songs</mark></td>
+</tr>
+<tr>
+<td>10/23/2017</td>
+<td>5</td>
+<td>Best game <mark>add more songs</mark></td>
+</tr>
+<tr>
+<td>11/23/2017</td>
+<td>1</td>
+<td>I hate this app all u do is press buttens and <mark>we need cooler songs</mark></td>
+</tr>
+<tr>
+<td>07/18/2017</td>
+<td>5</td>
+<td>Omg i never thought i would be <mark>able to chose my song</mark> wich is now my favorite song</td>
+</tr>
+<tr>
+<td>11/20/2017</td>
+<td>4</td>
+<td>So fun.  Great <mark>time killer.  Needs more songs</mark>.  This game is to short Also too hard to get gems?  This game needs a easier way to get them.</td>
+</tr>
+<tr>
+<td>10/25/2017</td>
+<td>5</td>
+<td><mark>Need to regenerate hearts off the app</mark> instead of while you are on</td>
+</tr>
+<tr>
+<td>11/16/2017</td>
+<td>5</td>
+<td>I love it but l think you should <mark>add some more music</mark></td>
+</tr>
+<tr>
+<td>06/30/2017</td>
+<td>5</td>
+<td>Amazing game but I <mark>need more music especially</mark> guitar music please</td>
+</tr>
+<tr>
+<td>07/01/2017</td>
+<td>5</td>
+<td>I love the feeling if <mark>being able to play the piano</mark></td>
+</tr>
+<tr>
+<td>06/22/2017</td>
+<td>5</td>
+<td>Best song ever  But can <mark>plz add some bollywood song</mark></td>
+</tr>
+<tr>
+<td>05/05/2017</td>
+<td>4</td>
+<td>Hey guys Great music an all but one more srtar if you quit giving adverts and <mark>cold you maybe add the Imperial march? (Darth Vader theme song</mark>)</td>
+</tr>
+<tr>
+<td>04/15/2017</td>
+<td>5</td>
+<td>It's great game.can I <mark>request the V3? OR some songs</mark> in O2JAM game? For better and happy gaming..tnx ..</td>
+</tr>
+<tr>
+<td>11/05/2017</td>
+<td>5</td>
+<td>I think this game is rally good and Easy the songs are good you just need to <mark>add 2017 songs</mark></td>
+</tr>
+<tr>
+<td>11/25/2017</td>
+<td>5</td>
+<td>I loved it .But I think <mark>they should have faster music</mark> otherwise it's 10 out of 10</td>
+</tr>
+<tr>
+<td>07/25/2017</td>
+<td>5</td>
+<td>Plz <mark>add more tunes</mark> to it but its fantastic i love</td>
+</tr>
+<tr>
+<td>07/11/2017</td>
+<td>4</td>
+<td>I love it!! But maybe could you <mark>guys add fnaf songs three days grace songs</mark> and all that type of stuff and Aldo log in to google</td>
+</tr>
+<tr>
+<td>10/20/2017</td>
+<td>2</td>
+<td>The music doesn't corrospond with the keys. It's just music in the background while you tap tiles. Also not sure if I like the orchestral music... based of piano tiles, and the tiles look like piano keys. So <mark>music should be piano music</mark>?</td>
+</tr>
+<tr>
+<td>09/17/2017</td>
+<td>4</td>
+<td>Love the songs and the challenges. Love tht I can play offline. Needs to be <mark>able to listen to the song</mark> like in the practice mode in ur other installments of this game</td>
+</tr>
+<tr>
+<td>04/08/2017</td>
+<td>5</td>
+<td>I think this game the most funnest game on the app store but yall <mark>need different music</mark></td>
+</tr>
+<tr>
+<td>04/23/2017</td>
+<td>3</td>
+<td><mark>Need newer songs. Hearing the same songs</mark> gets boring. Other then that I love it.</td>
+</tr>
+<tr>
+<td>10/04/2017</td>
+<td>1</td>
+<td>the piano game board is very sensitive and it doesn't always have accesses to the X button the first thing that popped up on my screen was add after add after <mark>add piano tiles1</mark> and  2 don't need to access photos so why does 3</td>
+</tr>
+<tr>
+<td>05/12/2017</td>
+<td>5</td>
+<td>Sound has a few glitches, the last note never makes a sound. <mark>Maybe adding something at the beginning of a song to you</mark> know the tempo. I love it though! Definitely will keep playing.</td>
+</tr>
+<tr>
+<td>05/02/2017</td>
+<td>5</td>
+<td>Love it its great and i <mark>would like you to Harry Potter theme song</mark> please please just try it please</td>
+</tr>
+<tr>
+<td>07/02/2017</td>
+<td>5</td>
+<td>This is game is literally so fun. Ive always played like piano tiles and stuff like that, but they got really boring and then I found this game and like, the songs they have on it are just so calming and get you motivated and you get really into it. Its also pretty easy. Its starts out slow like piano tiles and then progressively gets faster, I <mark>recommend this game over any piano game</mark>.</td>
+</tr>
+<tr>
+<td>10/03/2017</td>
+<td>4</td>
+<td>It is nothi nothing like a real piano but it has cool and smooth songs so if you like piano and smooth and <mark>classical rythem I recommend it</mark>!</td>
+</tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer">
+            <p>Auburn University Software and Intelligent Systems Lab</p>
+            <p>Contact Information: Phong Vu - lenniel@auburn.edu</p>
+        </div>
+        <script>
+            function mySearchFunction() {
+                var input, filter, table, tr, td, i;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("myTable");
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[2];
+                    if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+            /* 
+             Willmaster Table Sort
+             Version 1.1
+             August 17, 2016
+             Updated GetDateSortingKey() to correctly sort two-digit months and days numbers with leading 0.
+             Version 1.0, July 3, 2011
+             
+             Will Bontrager
+             https://www.willmaster.com/
+             Copyright 2011,2016 Will Bontrager Software, LLC
+             
+             This software is provided "AS IS," without 
+             any warranty of any kind, without even any 
+             implied warranty such as merchantability 
+             or fitness for a particular purpose.
+             Will Bontrager Software, LLC grants 
+             you a royalty free license to use or 
+             modify this software provided this 
+             notice appears on all copies. 
+             */
+//
+// One placed to customize - The id value of the table tag.
+
+            var TableIDvalue = "myTable";
+
+//
+//////////////////////////////////////
+            var TableLastSortedColumn = -1;
+            function SortTable() {
+                var sortColumn = parseInt(arguments[0]);
+                var type = arguments.length > 1 ? arguments[1] : 'T';
+                var dateformat = arguments.length > 2 ? arguments[2] : '';
+                var table = document.getElementById(TableIDvalue);
+                var tbody = table.getElementsByTagName("tbody")[0];
+                var rows = tbody.getElementsByTagName("tr");
+                var arrayOfRows = new Array();
+                type = type.toUpperCase();
+                dateformat = dateformat.toLowerCase();
+                for (var i = 0, len = rows.length; i < len; i++) {
+                    arrayOfRows[i] = new Object;
+                    arrayOfRows[i].oldIndex = i;
+                    var celltext = rows[i].getElementsByTagName("td")[sortColumn].innerHTML.replace(/<[^>]*>/g, "");
+                    if (type == 'D') {
+                        arrayOfRows[i].value = GetDateSortingKey(dateformat, celltext);
+                    } else {
+                        var re = type == "N" ? /[^\.\-\+\d]/g : /[^a-zA-Z0-9]/g;
+                        arrayOfRows[i].value = celltext.replace(re, "").substr(0, 25).toLowerCase();
+                    }
+                }
+                if (sortColumn == TableLastSortedColumn) {
+                    arrayOfRows.reverse();
+                } else {
+                    TableLastSortedColumn = sortColumn;
+                    switch (type) {
+                        case "N" :
+                            arrayOfRows.sort(CompareRowOfNumbers);
+                            break;
+                        case "D" :
+                            arrayOfRows.sort(CompareRowOfNumbers);
+                            break;
+                        default  :
+                            arrayOfRows.sort(CompareRowOfText);
+                    }
+                }
+                var newTableBody = document.createElement("tbody");
+                for (var i = 0, len = arrayOfRows.length; i < len; i++) {
+                    newTableBody.appendChild(rows[arrayOfRows[i].oldIndex].cloneNode(true));
+                }
+                table.replaceChild(newTableBody, tbody);
+            } // function SortTable()
+
+            function CompareRowOfText(a, b) {
+                var aval = a.value;
+                var bval = b.value;
+                return(aval == bval ? 0 : (aval > bval ? 1 : -1));
+            } // function CompareRowOfText()
+
+            function CompareRowOfNumbers(a, b) {
+                var aval = /\d/.test(a.value) ? parseFloat(a.value) : 0;
+                var bval = /\d/.test(b.value) ? parseFloat(b.value) : 0;
+                return(aval == bval ? 0 : (aval > bval ? 1 : -1));
+            } // function CompareRowOfNumbers()
+
+            function GetDateSortingKey(format, text) {
+                if (format.length < 1) {
+                    return "";
+                }
+                format = format.toLowerCase();
+                text = text.toLowerCase();
+                text = text.replace(/^[^a-z0-9]*/, "");
+                text = text.replace(/[^a-z0-9]*$/, "");
+                if (text.length < 1) {
+                    return "";
+                }
+                text = text.replace(/[^a-z0-9]+/g, ",");
+                var date = text.split(",");
+                if (date.length < 3) {
+                    return "";
+                }
+                var d = 0, m = 0, y = 0;
+                for (var i = 0; i < 3; i++) {
+                    var ts = format.substr(i, 1);
+                    if (ts == "d") {
+                        d = date[i];
+                    } else if (ts == "m") {
+                        m = date[i];
+                    } else if (ts == "y") {
+                        y = date[i];
+                    }
+                }
+                d = d.replace(/^0/, "");
+                if (d < 10) {
+                    d = "0" + d;
+                }
+                if (/[a-z]/.test(m)) {
+                    m = m.substr(0, 3);
+                    switch (m) {
+                        case "jan" :
+                            m = String(1);
+                            break;
+                        case "feb" :
+                            m = String(2);
+                            break;
+                        case "mar" :
+                            m = String(3);
+                            break;
+                        case "apr" :
+                            m = String(4);
+                            break;
+                        case "may" :
+                            m = String(5);
+                            break;
+                        case "jun" :
+                            m = String(6);
+                            break;
+                        case "jul" :
+                            m = String(7);
+                            break;
+                        case "aug" :
+                            m = String(8);
+                            break;
+                        case "sep" :
+                            m = String(9);
+                            break;
+                        case "oct" :
+                            m = String(10);
+                            break;
+                        case "nov" :
+                            m = String(11);
+                            break;
+                        case "dec" :
+                            m = String(12);
+                            break;
+                        default    :
+                            m = String(0);
+                    }
+                }
+                m = m.replace(/^0/, "");
+                if (m < 10) {
+                    m = "0" + m;
+                }
+                y = parseInt(y);
+                if (y < 100) {
+                    y = parseInt(y) + 2000;
+                }
+                return "" + String(y) + "" + String(m) + "" + String(d) + "";
+            } // function GetDateSortingKey()
+        </script>
+    </body>
+</html>

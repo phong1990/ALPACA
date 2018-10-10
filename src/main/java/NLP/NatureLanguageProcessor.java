@@ -302,7 +302,7 @@ public class NatureLanguageProcessor {
 		for (int i = 0; i < input.length(); i++) {
 			lastestPosition = i;
 			final char c = input.charAt(i);
-			if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '\'') {
+			if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') ) {
 				if (sb == null) {
 					sb = new StringBuilder();
 					firstPosition = i;
@@ -313,13 +313,22 @@ public class NatureLanguageProcessor {
 					// (lastestPosition-1) because it's the last character before this one
 					tokenList.add(sb.toString() + "_" + (lastestPosition - 1) + "_" + firstPosition);
 				sb = null;
-				// we don't add _ character because it messes with later annotations
-				if (c != ' ' && c != '_') {
+				if ( c == '\'' || c == '.'
+						|| c == '?' || c == ';' || c == ':' || c == '!' || c == '(' || c == ')' || c == '"'|| c == '&') {
 					sb = new StringBuilder();
 					sb.append(c);
-					// weird character don't need to be counted
-					tokenList.add(sb.toString() + "_-1_-1");
+					// weird character need to be counted
+					tokenList.add(sb.toString() + "_"+i+"_"+i);
 					sb = null;
+				}else {
+					// we don't add _ character because it messes with later annotations
+					if (c != ' ' && c != '_') {
+						sb = new StringBuilder();
+						sb.append(c);
+						// weird character don't need to be counted
+						tokenList.add(sb.toString() + "_-1_-1");
+						sb = null;
+					}
 				}
 			}
 		}

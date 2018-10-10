@@ -30,7 +30,7 @@ public class MainGUI extends JPanel implements ActionListener {
 	 * 
 	 */
 	private static final String version = "2.1";
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 	private static final long serialVersionUID = -6213851010100668003L;
 	protected static final String DataFolderString = "DataFolder";
 	protected static final String ConfigFileString = "Config";

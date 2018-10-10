@@ -138,7 +138,7 @@ public class ALPACAManager {
 						// use directory.mkdirs(); here instead.
 					}
 
-					ExtractCommonPatterns.extractPatterns(dataDirectory, 100000, PreprocesorMain.LV2_ROOTWORD_STEMMING,
+					ExtractCommonPatterns.extractPatterns(dataDirectory, 3000000, PreprocesorMain.LV2_ROOTWORD_STEMMING,
 							pattDir + "rawPattern.csv", true, null, null);
 					System.out.println(">>Done with template extraction.");
 				}

@@ -366,7 +366,7 @@ public class ExpandPatterns {
 	}
 
 	public static Set<String[]> getPOSpatternsInClass(String infile) throws FileNotFoundException {
-		String test = Util.class.getResource(infile).getPath();
+		//String test = Util.class.getResource(infile).getPath();
 		Set<String[]> results = new HashSet<>();
 		InputStream inputStream = null;
 		try {

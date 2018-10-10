@@ -334,7 +334,17 @@ public class Util {
 		}
 		return false;
 	}
+	public static boolean hasUpperCase(final CharSequence input) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < input.length(); i++) {
+			final char c = input.charAt(i);
+			if (c >= 'A' && c <= 'Z') {
+				return true;
+			}
 
+		}
+		return false;
+	}
 	public static boolean hasSpecialCharacters(final CharSequence input) {
 		for (int i = 0; i < input.length(); i++) {
 			final char c = input.charAt(i);

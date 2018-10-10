@@ -30,7 +30,17 @@ public class TextNormalizer {
 	private static boolean DEBUG = true;
 	private Set<String> interestingWords;
 	private Set<String> structuralWords;
+	private Set<String> intensifiers;
 	private Set<String> domainWords;
+	private Set<String> prepositions;
+
+	public Set<String> getPrepositions() {
+		return prepositions;
+	}
+
+	public Set<String> getIntensifiers() {
+		return intensifiers;
+	}
 
 	private TextNormalizer() {
 		// TODO Auto-generated constructor stub
@@ -86,13 +96,18 @@ public class TextNormalizer {
 		interestingWords = new HashSet<>();
 		structuralWords = new HashSet<>();
 		domainWords = new HashSet<>();
-
+		intensifiers = new HashSet<>();
+		prepositions = new HashSet<>();
+		prepositions.addAll(
+				loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/prepositions.txt")));
+		intensifiers.addAll(
+				loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/intensifiers.txt")));
+		interestingWords.addAll(prepositions);
+		interestingWords.addAll(intensifiers);
 		interestingWords.addAll(
 				loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/connectors.txt")));
 		interestingWords.addAll(
 				loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/negations.txt")));
-		interestingWords.addAll(
-				loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/intensifiers.txt")));
 		interestingWords
 				.addAll(loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/wh.txt")));
 		domainWords
@@ -265,9 +280,11 @@ public class TextNormalizer {
 		boolean inParentheses = false;
 		List<String> inParenthesesSentence = null;
 		for (String taggedTok : taggedTokens) {
-			if (!isPositionable(taggedTok)) // this is a wrongly tagged one
-				continue;
+			// if (!isPositionable(taggedTok)) // this is a wrongly tagged one
+			// continue;
 			String[] pair = taggedTok.split("_");
+			if (!isPositionable(pair[0])) // this is a wrongly tagged one
+				continue;
 			// if (pair.length == 2) // sometime special characters make splitting
 			// // not working
 			// continue;
@@ -322,9 +339,15 @@ public class TextNormalizer {
 						pair = customStemmer.stem(pair, true);
 						break;
 					}
+
+//					if (pair.length != 4) {
+//						System.out.println("Can't normalize this text, will ignore it: " + input);
+//						return null;
+//					}
 					if (needPOS) {
 						String taggedWord = null;
 						try {
+
 							// if (pair[2].equals("-1"))
 							// System.out.println();
 							// this one has position
@@ -335,8 +358,7 @@ public class TextNormalizer {
 							System.err.println("====================================");
 							System.err.println(
 									"WARNING: An error I have never met before, please send the log back to me.");
-							System.err.println(
-									"This review will be ignored from our analysis.");
+							System.err.println("This review will be ignored from our analysis.");
 							System.err.println(pair[0]);
 							System.err.println(pair[1]);
 							System.err.println(input);
@@ -396,13 +418,14 @@ public class TextNormalizer {
 		// //System.err.println(input);
 		// }
 		// return taggedTokens;
-		return addPositionForTaggedTokens(taggedTokens, text[1].split("\\s+"), text[1], text[0], taggedText);
+		return addPositionForTaggedTokens(taggedTokens, text[1].split("\\s+"), text[1], text[0], taggedText, input);
 	}
 
 	public String[] addPositionForTaggedTokens(String[] taggedTokens, String[] positions, String text1, String text0,
-			String taggedText) {
+			String taggedText, String original) {
 
-		// this array shoukd be the same size with positions, else we can't map them together
+		// this array shoukd be the same size with positions, else we can't map them
+		// together
 		String[] beforeTagged = text0.split("\\s+");
 		if (beforeTagged.length != positions.length)
 			return null;
@@ -440,7 +463,7 @@ public class TextNormalizer {
 				System.err.println("WARNING: Cannot match this processed text back to the original document.");
 				System.err.println("====================================");
 				System.err.println(text1);
-				System.err.println(text0);
+				System.err.println(original);
 				System.err.println(taggedText);
 				System.err.println(testString.toString());
 				System.err.println("====================================");
@@ -515,16 +538,19 @@ public class TextNormalizer {
 			if (c >= 'A' && c <= 'Z')
 				return false; // things get to this point must be lower cased
 			if (c == '_')
-				return false;
+				return false; // should not have any '_' in the text anymore
 			if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
 				return true;
+			if (c == '\'' || c == '?' || c == '('|| c == ')'|| c == '.'|| c == ';'|| c == '!')
+				return true; 
 
 		}
 		return false;
 	}
 
 	public String fixORiginalCommonMistake(String input) {
-		return input.replace("n.t ", " not ").replace("n't ", " not ");
+		return input.replace(" havn't ", " haven't ").replace(" can't ", " cann't ").replace(" can.t ", " cann.t ")
+				.replace("n.t ", " not ").replace("n't ", " not ");
 	}
 
 	// will return null if this text is not english
@@ -619,7 +645,7 @@ public class TextNormalizer {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		TextNormalizer normalizer = TextNormalizer.getInstance();
-		normalizer.readConfigINI("C:\\Users\\pmv0006\\Desktop\\ALPACA\\dictionary\\config.INI");
+		normalizer.readConfigINI("C:\\Users\\pmv0006\\Desktop\\ALPACARunningPackage\\dictionary\\config.INI");
 		try {
 			// String test = "Angry birds I am loving the new levels they (the new level. I
 			// meant the"
@@ -628,9 +654,9 @@ public class TextNormalizer {
 			// + "love angry birds.And you should sign with sponge bob squarepants for"
 			// + " an app .And you should youse Billy Joel music for your background"
 			// + " sound. He is running";
-			String test = "Can you please fix the face detector";
-			List<List<String>> results = normalizer.normalize_SplitSentence(test, PreprocesorMain.LV2_ROOTWORD_STEMMING,
-					true);
+			String test = "I want a other player";
+			List<List<String>> results = normalizer.normalize_SplitSentence(test,
+					PreprocesorMain.LV1_SPELLING_CORRECTION, true);
 			for (List<String> sentence : results) {
 				for (String word : sentence) {
 					System.out.print(word + " ");
