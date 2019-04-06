@@ -36,11 +36,11 @@ public class StanfordNLPProcessing {
 	private static final int PHRASE_MAX_SIZE = 30;
 	private static final String[] SENTIMENT_MEANING = { "Very Negative",
 			"Negative", "Neutral", "Positive", "Very Positive" };
-	private static final HashSet<String> POSTAG_OF_NOUN = new HashSet<>(
+	public static final HashSet<String> POSTAG_OF_NOUN = new HashSet<>(
 			Arrays.asList(new String[] { "NN", "NNS", "NP" }));
-	private static final HashSet<String> POSTAG_OF_ADJECTIVE = new HashSet<>(
+	public static final HashSet<String> POSTAG_OF_ADJECTIVE = new HashSet<>(
 			Arrays.asList(new String[] { "ADJP", "JJ" }));
-	private static final HashSet<String> POSTAG_OF_VERB = new HashSet<>(
+	public static final HashSet<String> POSTAG_OF_VERB = new HashSet<>(
 			Arrays.asList(new String[] { "VBG", "VBP", "VB", "VP", "@VP", "VBZ",
 					"VBN" }));
 	private static final HashSet<String> POSTAG_OF_VERB_COMPLEMENT = new HashSet<>(

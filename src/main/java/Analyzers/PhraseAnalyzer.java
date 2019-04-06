@@ -260,7 +260,8 @@ public class PhraseAnalyzer {
 		// experiment code, remove later
 //		PrintWriter pw = new PrintWriter(new File(
 //				"D:/projects/ALPACA/truthSetRequests/experiment/matched.csv"));
-		for (Document doc : dataset.getDocumentSet()) {
+		Set<Document> dataDoc = dataset.getDocumentSet();
+		for (Document doc : dataDoc) {
 			// this kill switch is being planted everywhere
 			if (ALPACAManager.Kill_Switch == true) {
 				return output;

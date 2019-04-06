@@ -189,6 +189,28 @@ public class Document {
 		return strbd.toString();
 	}
 
+	public String readReplyFromDirectory(String directory)  {
+		Scanner replyFile;
+		String reply = "";
+		try {
+			replyFile = new Scanner(new File(directory + "reply//" + mRawText_fileName));
+			StringBuilder strbd = new StringBuilder();
+			try {
+
+				while (replyFile.hasNextLine()) {
+					strbd.append(replyFile.nextLine());
+				}
+			} finally {
+				replyFile.close();
+			}
+			reply = strbd.toString();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		
+		return reply;
+	}
 	public String toString(boolean withPOS, Vocabulary voc)
 			throws ClassNotFoundException, SQLException, UnsupportedEncodingException, IOException {
 		if (sentences == null)

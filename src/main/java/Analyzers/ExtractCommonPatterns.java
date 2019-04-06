@@ -179,6 +179,8 @@ public class ExtractCommonPatterns {
 		compArr = combineCOMPOBJ(compArr);
 		compArr = buildVBCompositions(compArr);
 		compArr = combineCOMPACT(compArr);
+		// extra DT now are not necessary
+		compArr = removeExtraDT(compArr);
 		// if (compArr.length > 0){
 		// if (compArr[0].equals("need"))
 		// System.out.println();
@@ -253,13 +255,37 @@ public class ExtractCommonPatterns {
 		return compArr;
 	}
 
+	// those DT are special cases, because they can also be DT and also be a
+	// reference to an entity. At this point, since they are not connected to a
+	// COMPNN/COMPJJ as the role of a DT, they will be treated as COMPNN.
+	// The other possible leftover DT are: a, an, the will be removed since they
+	// don't help our generalization process.
+	private static String[] removeExtraDT(String[] compArr) {
+		List<String> complist = new ArrayList<>();
+		for (int i = 0; i < compArr.length; i++) {
+			if (!compArr[i].equals("DT") && !compArr[i].equals("PRP$") ) {
+				if (compArr[i].equals("this") || compArr[i].equals("that") || compArr[i].equals("these")
+						|| compArr[i].equals("those"))
+					complist.add("COMPNN");
+				else
+					complist.add(compArr[i]);
+			}
+
+		}
+
+		compArr = complist.toArray(new String[] {});
+		return compArr;
+	}
+
 	private static String[] buildCOMPJJ(String[] compArr) {
 		List<String> compJJlist = new ArrayList<>();
 		Set<String> intensifiers = TextNormalizer.getInstance().getIntensifiers();
 		for (int i = 0; i < compArr.length; i++) {
 
 			if (compArr[i].equals("JJ")) {
-				if ((i - 1) >= 0 && compArr[i - 1].equals("DT")) {
+				if ((i - 1) >= 0 && (compArr[i - 1].equals("DT") || compArr[i - 1].equals("this")
+						|| compArr[i - 1].equals("that") || compArr[i - 1].equals("these")
+						|| compArr[i - 1].equals("those"))) {
 					compJJlist.remove(compJJlist.size() - 1);
 					compJJlist.add("COMPJJ");
 					continue;
@@ -391,7 +417,7 @@ public class ExtractCommonPatterns {
 		List<String> COMPACTlist = new ArrayList<>();
 		for (int i = 0; i < compArr.length; i++) {
 
-			if (compArr[i].equals("VB")) {
+			if (compArr[i].equals("VB") || compArr[i].equals("VBP")) {
 				if ((i - 1) >= 0 && compArr[i - 1].equals("COMPJJ")) {
 					COMPACTlist.remove(COMPACTlist.size() - 1);
 					COMPACTlist.add("COMPVB");
@@ -410,6 +436,10 @@ public class ExtractCommonPatterns {
 		List<String> COMPOBJlist = new ArrayList<>();
 		for (int i = 0; i < POSArr.length; i++) {
 			if (POSArr[i].equals("PRP")) // replace all PRP as NN to create object
+				POSArr[i] = "NN";
+			if (POSArr[i].equals("CD")) // replace all CD as NN to create object
+				POSArr[i] = "NN";
+			if (POSArr[i].equals("LS")) // replace all LS as NN to create object
 				POSArr[i] = "NN";
 			if (POSArr[i].equals("FW")) // replace all FW as NN to create object
 				POSArr[i] = "NN";
@@ -442,9 +472,11 @@ public class ExtractCommonPatterns {
 							continue;
 						}
 					}
-					if (POSArr[iMinus2].equals("DT")) {
+					if (POSArr[iMinus2].equals("DT") || POSArr[iMinus2].equals("this") || POSArr[iMinus2].equals("that")
+							|| POSArr[iMinus2].equals("these") || POSArr[iMinus2].equals("those")) {
 						// the jj nn
 						// the cd nn
+						// this/that/these/those/a/an
 						if (POSArr[iMinus1].equals("COMPJJ") || POSArr[iMinus1].equals("CD")) {
 							COMPOBJlist.remove(COMPOBJlist.size() - 1);
 							COMPOBJlist.remove(COMPOBJlist.size() - 1);
@@ -456,7 +488,9 @@ public class ExtractCommonPatterns {
 					// the nn
 					// PRP$ NN
 					if (POSArr[iMinus1].equals("COMPJJ") || POSArr[iMinus1].equals("DT")
-							|| POSArr[iMinus1].equals("PRP$")) {
+							|| POSArr[iMinus1].equals("PRP$") || POSArr[iMinus1].equals("this")
+							|| POSArr[iMinus1].equals("that") || POSArr[iMinus1].equals("these")
+							|| POSArr[iMinus1].equals("those")) {
 						COMPOBJlist.remove(COMPOBJlist.size() - 1);
 						COMPOBJlist.add("COMPNN");
 						continue;
@@ -473,6 +507,8 @@ public class ExtractCommonPatterns {
 
 	private static boolean isFilterable(String[] compArr, Set<String> interestingWords, Set<String> domainWords,
 			boolean strict) {
+		if (compArr.length <= 1)
+			return true;
 		// String[] lastWord = words.get(words.size() - 1).split("_");
 		String lastWord = compArr[compArr.length - 1];
 		if (strict)
@@ -482,14 +518,15 @@ public class ExtractCommonPatterns {
 		if (strict)
 			if (!PhraseAnalyzer.POSTAG_OF_VOCABULARY.contains(lastWord))
 				return true;
-//		String firstWord = compArr[0];
-//		if (strict)
-//			if (interestingWords.contains(firstWord) && !domainWords.contains(firstWord))
-//				return true;
+		// String firstWord = compArr[0];
+		// if (strict)
+		// if (interestingWords.contains(firstWord) && !domainWords.contains(firstWord))
+		// return true;
 		// can't start with a word that is not carrying main semantic
-//		if (strict)
-//			if (!PhraseAnalyzer.POSTAG_OF_VOCABULARY.contains(firstWord) && !domainWords.contains(firstWord))
-//				return true;
+		// if (strict)
+		// if (!PhraseAnalyzer.POSTAG_OF_VOCABULARY.contains(firstWord) &&
+		// !domainWords.contains(firstWord))
+		// return true;
 		// at least has one POSTAG_OF_VOCABULARY word
 		for (String word : compArr) {
 			if (PhraseAnalyzer.POSTAG_OF_VOCABULARY.contains(word))
@@ -645,8 +682,7 @@ public class ExtractCommonPatterns {
 
 	// test
 	public static void main(String[] args) {
-		String[] POSArr = new String[] { "PRP", "not", "VB", "of", "DT", "NN", "NN", "NN", "and", "DT", "NN", "but",
-				"PRP", "VB", "if", "NN", "VB", "CD", "JJ", "NN", "NN" };
+		String[] POSArr = new String[] { "PRP", "hate", "FW" };
 		String[] result = buildComposition(POSArr);
 		for (String pos : result) {
 			System.out.print(pos + " ");

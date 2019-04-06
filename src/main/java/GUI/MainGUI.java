@@ -48,7 +48,7 @@ public class MainGUI extends JPanel implements ActionListener {
 	protected JButton importcsvButton = null;
 	protected JLabel actionLabel;
 	protected JTextField dataFolderTextField = null;
-	protected JTextField configTextField = null;
+	//protected JTextField configTextField = null;
 	protected PreprocessingGUI preprocessingDialog;
 	// protected KeywordGUI keywordDialog;
 	protected PatternGUI patternDiaglog;
@@ -61,14 +61,14 @@ public class MainGUI extends JPanel implements ActionListener {
 	public JProgressBar progressBar = null;
 	protected JButton cancelTaskButton = null;
 	protected CustomFileDirChooser dataFileChoser = null;
-	protected CustomFileDirChooser ConfigFileChoser = null;
+	//protected CustomFileDirChooser ConfigFileChoser = null;
 	protected ClusteringGUI clusteringDialog = null;
 
 	public void enableAllFunction(boolean enable) {
 		importcsvButton.setEnabled(enable);
 		prepButton.setEnabled(enable);
 		dataFileChoser.setEnabled(enable);
-		ConfigFileChoser.setEnabled(enable);
+		//ConfigFileChoser.setEnabled(enable);
 		enableAnalyzing(enable);
 		cancelTaskButton.setEnabled(!enable);
 	}
@@ -77,7 +77,7 @@ public class MainGUI extends JPanel implements ActionListener {
 
 		dataFileChoser.setEnabled(enable);
 		importcsvButton.setEnabled(enable);
-		ConfigFileChoser.setEnabled(enable);
+		//ConfigFileChoser.setEnabled(enable);
 		cancelTaskButton.setEnabled(!enable);
 	}
 
@@ -157,48 +157,48 @@ public class MainGUI extends JPanel implements ActionListener {
 		dataFileChoser = new CustomFileDirChooser(dataFolderTextField, null, true, aframe, false, null);
 
 		// Text Normalizer config file: [ ][change]
-		configTextField = new JTextField(10);
-		configTextField.setEnabled(false);
-		configTextField.setActionCommand(ConfigFileString);
-		configTextField.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-
-				String configFile = configTextField.getText();
-				if (!ALPACAManager.getInstance().startReadingConfigINIThread(configFile)) {
-					isConfigReady = false;
-					isDatafolderReady = false;
-					enableAnalyzing(false);
-				} else {
-					isConfigReady = true;
-					if (isDatafolderReady && isConfigReady) {
-						prepButton.setEnabled(true);
-						if (ALPACAManager.getInstance().isDatafolderPreprocessed(dataFolderTextField.getText() + "/")) {
-							enableAnalyzing(true);
-						} else {
-							enableAnalyzing(false);
-						}
-					}
-				}
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-			}
-		});
-		JLabel ConfigFieldLabel = new JLabel("Text Normalizer Config File: ");
-		ConfigFieldLabel.setLabelFor(configTextField);
-		ConfigFileChoser = new CustomFileDirChooser(configTextField, null, false, aframe, false,
-				new FileNameExtensionFilter("ini file", "ini"));
+//		configTextField = new JTextField(10);
+//		configTextField.setEnabled(false);
+//		configTextField.setActionCommand(ConfigFileString);
+//		configTextField.getDocument().addDocumentListener(new DocumentListener() {
+//
+//			@Override
+//			public void removeUpdate(DocumentEvent e) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//
+//			@Override
+//			public void insertUpdate(DocumentEvent e) {
+//				// TODO Auto-generated method stub
+//
+//				String configFile = configTextField.getText();
+//				if (!ALPACAManager.getInstance().startReadingConfigINIThread(configFile)) {
+//					isConfigReady = false;
+//					isDatafolderReady = false;
+//					enableAnalyzing(false);
+//				} else {
+//					isConfigReady = true;
+//					if (isDatafolderReady && isConfigReady) {
+//						prepButton.setEnabled(true);
+//						if (ALPACAManager.getInstance().isDatafolderPreprocessed(dataFolderTextField.getText() + "/")) {
+//							enableAnalyzing(true);
+//						} else {
+//							enableAnalyzing(false);
+//						}
+//					}
+//				}
+//			}
+//
+//			@Override
+//			public void changedUpdate(DocumentEvent e) {
+//				// TODO Auto-generated method stub
+//			}
+//		});
+//		JLabel ConfigFieldLabel = new JLabel("Text Normalizer Config File: ");
+//		ConfigFieldLabel.setLabelFor(configTextField);
+		//ConfigFileChoser = new CustomFileDirChooser(configTextField, null, false, aframe, false,
+				//new FileNameExtensionFilter("ini file", "ini"));
 
 		// panel for setting.
 		// Create a label to put messages during an action event.
@@ -222,11 +222,11 @@ public class MainGUI extends JPanel implements ActionListener {
 		subsettingsPane.add(DataFieldLabel);
 		subsettingsPane.add(dataFileChoser);
 		subsettingsPane.add(panelcsv);
-		subsettingsPane.add(ConfigFieldLabel);
-		subsettingsPane.add(ConfigFileChoser);
+		//subsettingsPane.add(ConfigFieldLabel);
+		//subsettingsPane.add(ConfigFileChoser);
 		subsettingsPane.add(new JLabel(""));
 
-		SpringUtilities.makeCompactGrid(subsettingsPane, 2, 3, // rows, cols
+		SpringUtilities.makeCompactGrid(subsettingsPane, 1, 3, // rows, cols
 				6, 6, // initX, initY
 				6, 6); // xPad, yPad
 
@@ -453,6 +453,9 @@ public class MainGUI extends JPanel implements ActionListener {
 		}
 	}
 
+	public void setActionLabel(String msg) {
+		actionLabel.setText(msg);		
+	}
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be invoked
 	 * from the event dispatch thread.

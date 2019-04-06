@@ -52,8 +52,8 @@ public class SearchEngine {
 							+ rawText.substring(highlightedPosition[0], highlightedPosition[1] + 1) + "</mark>";
 					if (highlightedPosition[1] + 1 < rawText.length())
 						highlighted += rawText.substring(highlightedPosition[1] + 1);
-
-					HTMLOutput.FinalResult res = new HTMLOutput.FinalResult(highlighted, df.format(doc.getTime()),
+					String reply = doc.readReplyFromDirectory(data.getDirectory());
+					HTMLOutput.FinalResult res = new HTMLOutput.FinalResult(highlighted,reply, df.format(doc.getTime()),
 							doc.getRating());
 					printableResults.add(res);
 				} catch (java.lang.StringIndexOutOfBoundsException e) {

@@ -17,6 +17,7 @@ import javax.print.Doc;
 import org.bytedeco.javacpp.RealSense.context;
 import org.tartarus.snowball.SnowballStemmer;
 
+import AU.ALPACA.ExperimentReponse;
 import AU.ALPACA.PreprocesorMain;
 import NLP.CustomStemmer;
 import NLP.NatureLanguageProcessor;
@@ -28,11 +29,17 @@ public class TextNormalizer {
 	private static String DICTIONARY_DIRECTORY = "dictionary/";
 	private static String TRIGRAM_TRAINING_DIRECTORY = "dictionary/trigramTraning/";
 	private static boolean DEBUG = true;
+	private static boolean needCorrection = true;// this is a hidden feature for splitting sentence without corrections
 	private Set<String> interestingWords;
 	private Set<String> structuralWords;
 	private Set<String> intensifiers;
 	private Set<String> domainWords;
 	private Set<String> prepositions;
+	private Set<String> DT_WHs;
+
+	public void setNeedCorrection(boolean need) {
+		needCorrection = need;
+	}
 
 	public Set<String> getPrepositions() {
 		return prepositions;
@@ -98,6 +105,9 @@ public class TextNormalizer {
 		domainWords = new HashSet<>();
 		intensifiers = new HashSet<>();
 		prepositions = new HashSet<>();
+		DT_WHs = new HashSet<>();
+		DT_WHs.add("this");
+		DT_WHs.add("that");
 		prepositions.addAll(
 				loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/prepositions.txt")));
 		intensifiers.addAll(
@@ -108,8 +118,8 @@ public class TextNormalizer {
 				loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/connectors.txt")));
 		interestingWords.addAll(
 				loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/negations.txt")));
-		interestingWords
-				.addAll(loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/wh.txt")));
+		DT_WHs.addAll(loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/wh.txt")));
+		interestingWords.addAll(DT_WHs);
 		domainWords
 				.addAll(loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/domain.txt")));
 		interestingWords.addAll(domainWords);
@@ -118,6 +128,10 @@ public class TextNormalizer {
 				.addAll(loadWordsSet(new File(TextNormalizer.getDictionaryDirectory() + "baseword/misc/others.txt")));
 
 		System.out.println("DONE Reading configuration file");
+	}
+
+	public Set<String> getDT_WHs() {
+		return DT_WHs;
 	}
 
 	private static Set<String> loadWordsSet(File testDataFile) throws FileNotFoundException {
@@ -324,6 +338,8 @@ public class TextNormalizer {
 						senOI = sentence;
 					}
 					switch (level) {
+					case PreprocesorMain.LV0_NONE:
+						break;
 					case PreprocesorMain.LV1_SPELLING_CORRECTION:
 						break;
 					case PreprocesorMain.LV2_ROOTWORD_STEMMING:
@@ -340,10 +356,10 @@ public class TextNormalizer {
 						break;
 					}
 
-//					if (pair.length != 4) {
-//						System.out.println("Can't normalize this text, will ignore it: " + input);
-//						return null;
-//					}
+					// if (pair.length != 4) {
+					// System.out.println("Can't normalize this text, will ignore it: " + input);
+					// return null;
+					// }
 					if (needPOS) {
 						String taggedWord = null;
 						try {
@@ -365,8 +381,12 @@ public class TextNormalizer {
 							System.err.println("====================================");
 						}
 					} else {
-						// this one has position
-						senOI.add(pair[0] + "_" + pair[2] + "_" + pair[3]);
+						if (needCorrection) {
+							// this one has position
+							senOI.add(pair[0] + "_" + pair[2] + "_" + pair[3]);
+						} else {
+							senOI.add(pair[0]);
+						}
 
 					}
 				}
@@ -386,22 +406,127 @@ public class TextNormalizer {
 		return correctedTaggedSentences;
 	}
 
+	// split but no normalize nor POS tagging
+	public List<List<String>> splitSentence(String input) throws Exception {
+		if (input == null)
+			throw new Exception("input is null ");
+		String[] taggedTokens = preprocessAndSplitToTaggedTokens(input);
+		if (taggedTokens == null)
+			return null;
+		List<List<String>> correctedTaggedSentences = new ArrayList<>();
+		List<String> sentence = null;
+		boolean inParentheses = false;
+		List<String> inParenthesesSentence = null;
+		for (String taggedTok : taggedTokens) {
+			// if (!isPositionable(taggedTok)) // this is a wrongly tagged one
+			// continue;
+			String[] pair = taggedTok.split("_");
+			if (!isPositionable(pair[0])) // this is a wrongly tagged one
+				continue;
+			// if (pair.length == 2) // sometime special characters make splitting
+			// // not working
+			// continue;
+			pair[0] = pair[0].toLowerCase();
+			if (pair[0].equals(".") || pair[0].equals(";") || pair[1].equals(".") || pair[1].equals(":")
+					|| pair[0].equals("!") || pair[0].equals("?") || pair[1].equals("-RRB-")) {
+				// end sentence
+				if (inParentheses) {
+					if (inParenthesesSentence != null) {
+						correctedTaggedSentences.add(Util.deepCopyList(inParenthesesSentence));
+						inParenthesesSentence = null;
+					}
+					if (pair[1].equals("-RRB-"))
+						inParentheses = false;
+				} else {
+					if (sentence != null) {
+						correctedTaggedSentences.add(Util.deepCopyList(sentence));
+						sentence = null;
+					}
+				}
+			} else {
+				if (pair[1].equals(",") || pair[1].equals("``") || pair[1].equals("''") || pair[1].equals("--")
+						|| pair[1].equals("$") || pair[1].equals("#") || pair[1].equals("SYM"))
+					continue; // ignore all of these special chars and symbols
+				if (pair[1].equals("-LRB-")) {
+					inParentheses = true;
+				} else {
+					List<String> senOI = null;
+					if (inParentheses) {
+
+						if (inParenthesesSentence == null)
+							inParenthesesSentence = new ArrayList<>();
+						senOI = inParenthesesSentence;
+					} else {
+						if (sentence == null)
+							sentence = new ArrayList<>();
+						senOI = sentence;
+					}
+
+					// if (pair.length != 4) {
+					// System.out.println("Can't normalize this text, will ignore it: " + input);
+					// return null;
+					// }
+					String taggedWord = null;
+					try {
+
+						// if (pair[2].equals("-1"))
+						// System.out.println();
+						// this one has position
+						senOI.add(pair[0]);
+					} catch (Exception e) {
+						System.err.println("====================================");
+						System.err
+								.println("WARNING: An error I have never met before, please send the log back to me.");
+						System.err.println("This review will be ignored from our analysis.");
+						System.err.println(pair[0]);
+						System.err.println(pair[1]);
+						System.err.println(input);
+						System.err.println("====================================");
+					}
+
+				}
+
+			}
+		}
+		if (inParenthesesSentence != null) {
+			correctedTaggedSentences.add(Util.deepCopyList(inParenthesesSentence));
+			sentence = null;
+		}
+		if (sentence != null) {
+			correctedTaggedSentences.add(Util.deepCopyList(sentence));
+			sentence = null;
+		}
+		for (List<String> sen : correctedTaggedSentences) {
+			debug_println(sen.toString());
+		}
+
+		return correctedTaggedSentences;
+	}
+
 	// will return null if this text is not english
 	private String[] preprocessAndSplitToTaggedTokens(String input) {
 		NatureLanguageProcessor nlp = NatureLanguageProcessor.getInstance();
 		// 0th step: lower case
 		input = input.toLowerCase();
+		String[] text = null;
 		// input = fixORiginalCommonMistake(input);
 		// 1st step: replace words with a mapper, keep the whole format
-		List<String> tokens = NatureLanguageProcessor.wordSplitWithPositions(input);
-		List<String> correctedTokens = nlp.correctUsingMapRetainPosition(tokens);
-		String[] text = NatureLanguageProcessor.mergeIntoTextWithPosition(correctedTokens);
-		if (text == null)
-			return null;
-		// 2nd step: check if this is a non-English text, if yes then
-		// discontinue
-		if (isNonEnglishWithPosition(correctedTokens, 0.4, 0.5, 0.6))
-			return null;
+		if (needCorrection) {
+			List<String> tokens = NatureLanguageProcessor.wordSplitWithPositions(input);
+			List<String> correctedTokens = nlp.correctUsingMapRetainPosition(tokens);
+			text = NatureLanguageProcessor.mergeIntoTextWithPosition(correctedTokens);
+			if (text == null)
+				return null;
+			// 2nd step: check if this is a non-English text, if yes then
+			// discontinue
+			if (isNonEnglishWithPosition(correctedTokens, 0.4, 0.5, 0.6))
+				return null;
+		} else {
+			List<String> tokens = NatureLanguageProcessor.wordSplitWithPositions(input);
+			text = NatureLanguageProcessor.mergeIntoTextWithPosition(tokens);
+			if (text == null)
+				return null;
+		}
 		// System.out.println(text);
 		// 3rd step: tag the whole thing
 		String taggedText = nlp.findPosTag(text[0]);
@@ -476,7 +601,7 @@ public class TextNormalizer {
 				// advance array ID to find new match
 				arrayID++;
 				if (arrayID < positions.length)
-					while (positions[arrayID].equals("-1_-1")) {
+					while (arrayID < positions.length && positions[arrayID].equals("-1_-1")) {
 						arrayID++;
 						if (arrayID == positions.length) {
 							arrayID = -1; // signal ending
@@ -497,15 +622,22 @@ public class TextNormalizer {
 					taggedTokens[i] = taggedTokens[i] + "_" + positions[arrayIDNOMATCH];
 					// advance array ID to find new match
 					arrayID++;
-					if (arrayID < positions.length)
-						while (positions[arrayID].equals("-1_-1")) {
+					// in case it's a dot sequence
+					if (pair[0].equals("...")) {
+						while (arrayID < beforeTagged.length && beforeTagged[arrayID].equals("."))
+							arrayID++;
+						if (arrayID == beforeTagged.length)
+							arrayID = -1; // signal ending
+					}
+					if (arrayID >= 0 && arrayID < positions.length) {
+						while (arrayID < positions.length && positions[arrayID].equals("-1_-1")) {
 							arrayID++;
 							if (arrayID == positions.length) {
 								arrayID = -1; // signal ending
 								break;
 							}
 						}
-					else
+					} else
 						arrayID = -1; // signal ending
 				} else {
 					// not the first time not matching
@@ -533,6 +665,9 @@ public class TextNormalizer {
 	// has at least 1 valid character, stop at _ because input is a POS tagged token
 	// (text_tag)
 	private boolean isPositionable(final CharSequence input) {
+		if (((String) input).contains("-LRB-") || ((String) input).contains("-RRB-") || ((String) input).contains("SYM")
+				|| ((String) input).contains("IN"))
+			return true;
 		for (int i = 0; i < input.length(); i++) {
 			final char c = input.charAt(i);
 			if (c >= 'A' && c <= 'Z')
@@ -541,8 +676,8 @@ public class TextNormalizer {
 				return false; // should not have any '_' in the text anymore
 			if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
 				return true;
-			if (c == '\'' || c == '?' || c == '('|| c == ')'|| c == '.'|| c == ';'|| c == '!')
-				return true; 
+			if (c == '\'' || c == '?' || c == '(' || c == ')' || c == '.' || c == ';' || c == '!' || c == '`')
+				return true;
 
 		}
 		return false;
@@ -647,19 +782,28 @@ public class TextNormalizer {
 		TextNormalizer normalizer = TextNormalizer.getInstance();
 		normalizer.readConfigINI("C:\\Users\\pmv0006\\Desktop\\ALPACARunningPackage\\dictionary\\config.INI");
 		try {
-			// String test = "Angry birds I am loving the new levels they (the new level. I
-			// meant the"
-			// + " new levels that is going well) are very challenging . You should make
-			// more levels . (random things) I"
-			// + "love angry birds.And you should sign with sponge bob squarepants for"
-			// + " an app .And you should youse Billy Joel music for your background"
-			// + " sound. He is running";
-			String test = "I want a other player";
-			List<List<String>> results = normalizer.normalize_SplitSentence(test,
-					PreprocesorMain.LV1_SPELLING_CORRECTION, true);
+			String test = "Angry birds I am loving the new levels they (the new level. I'd  meant the"
+					+ " new levels that is going well) are very challenging. You should make  more levels . (random things) I"
+					+ "love angry birds.And you should sign with sponge bob squarepants for"
+					+ " an app .And you should youse \"Billy Joel\" music for your background"
+					+ " sound. He is running????"
+					+ "After this new update I couldnt open the game...... am using redmi note 5!!! pls help me fix this."
+					+ "PUBGMOBILE_CS@tencentgames.com with the exact details of this issue and we will gladly assist you as soon as we can."
+					+ "Your latest update often goes to a black screen and only displays a blank black screen ....";
+			String test2 = "***   this app is a scam!!!**** do not save your credit info in this app!!, "
+					+ "it will make you pay for an expensive subscription if you click wrong once. their "
+					+ "business plan is to obtain payment details, and then trick their customers into making payments. "
+					+ "they do this by providing “oneminus1click payments” defaulting to large sums of money.the app is "
+					+ "maliciously designed to make you pay by accident. they will not return any accidental payments. "
+					+ "they will not even reply to your messages. also, most of the positive reviews here are fakes.**** scam warning!!****";
+			String test3 = "My rating is 4/5 or 7/10 for its usefulness. 8,5/10 in its category, as it is. "
+					+ "Meaning it's a free app, so might not be perfect but it serves its purpose. "
+					+ "|| Virus definition update is fixed. See edit history. Thanks. || Ps. Google is slow w/ notifications ^^";
+			// String test = "I want a other player";
+			List<List<String>> results = normalizer.splitSentence(ExperimentReponse.transformCommonLinks(test3, false));
 			for (List<String> sentence : results) {
 				for (String word : sentence) {
-					System.out.print(word + " ");
+					System.out.print(ExperimentReponse.transformCommonLinks(word, true) + " ");
 				}
 				System.out.println();
 			}

@@ -317,23 +317,23 @@ public class Experiment {
 					functionalWords.add(line[i]);
 		}
 		scn.close();
-		for(String w: functionalWords) {
+		for (String w : functionalWords) {
 			System.out.println(w);
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
-//		populateDataFolder("G:\\projects\\ALPACA\\myTruthSet\\trustSetNew.csv","G:\\projects\\ALPACA\\myTruthSet");
-//		getFunctionalWords("C:\\Users\\pmv0006\\Desktop\\ALPACA\\res\\seedPatterns\\request.csv");
+		populateDataFolder("G:\\projects\\ALPACA\\fixTruthSet\\fixedTruthSet.csv", "G:\\projects\\ALPACA\\fixTruthSet");
+		// getFunctionalWords("C:\\Users\\pmv0006\\Desktop\\ALPACA\\res\\seedPatterns\\bugreport.csv");
 		readCONFIG("C:\\Users\\pmv0006\\Desktop\\ALPACARunningPackage\\dictionary\\config.INI");
 		Experiment experiment = new Experiment();
 		Dataset currentDataset = null;
 		// we use ALPACA to pre-process this data so no pre-processing here.
 		// expr1: classify intention
-		experiment.classifyTypes(currentDataset, "G:\\projects\\ALPACA\\myTruthSet\\", 0.5,
-				"G:\\projects\\ALPACA\\myTruthSet\\expandedPatterns\\requestEx_loose.csv", "request",
-				"G:\\projects\\ALPACA\\myTruthSet\\experimentResults\\request.csv");
-		collectStatistic("G:\\projects\\ALPACA\\myTruthSet\\experimentResults\\request.csv", "request");
+		experiment.classifyTypes(currentDataset, "G:\\projects\\ALPACA\\fixTruthSet\\", 0.5,
+				"G:\\projects\\ALPACA\\fixTruthSet\\expandedPatterns\\complaintEx_loose.csv", "complaint",
+				"G:\\projects\\ALPACA\\fixTruthSet\\experimentResults\\complaint.csv");
+		collectStatistic("G:\\projects\\ALPACA\\fixTruthSet\\experimentResults\\complaint.csv", "complaint");
 		// expr2: classify requests
 	}
 }

@@ -317,7 +317,7 @@ public class NatureLanguageProcessor {
 						|| c == '?' || c == ';' || c == ':' || c == '!' || c == '(' || c == ')' || c == '"'|| c == '&') {
 					sb = new StringBuilder();
 					sb.append(c);
-					// weird character need to be counted
+					// weird characters need to be counted
 					tokenList.add(sb.toString() + "_"+i+"_"+i);
 					sb = null;
 				}else {

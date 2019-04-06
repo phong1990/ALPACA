@@ -107,6 +107,7 @@ public class TimeAnalyzer {
 								pw.println("<td>" + res.time + "</td>");
 								pw.println("<td>" + res.rating + "</td>");
 								pw.println("<td>" + res.reviewText + "</td>");
+								pw.println("<td>" + res.replyText + "</td>");
 								pw.println("</tr>");
 							}
 
@@ -162,6 +163,8 @@ public class TimeAnalyzer {
 			double error = timeSerries[k] - movingAvr[k];
 			if (sigma != 0) {
 				ratios[k] = error / sigma;
+				if(ratios[k] < 0)
+					ratios[k] = ratios[k]*(-1); // normalize
 			}
 		}
 		return makeJSONResult(timeSerries, movingAvr, ratios, listOfDays);

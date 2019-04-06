@@ -47,6 +47,7 @@ import Utils.Util;
 import Vocabulary.Vocabulary;
 
 public class ALPACAManager {
+	public static final boolean RELEASE = false;
 	public static boolean Kill_Switch = false;
 	private static ALPACAManager instance = null;
 
@@ -60,7 +61,6 @@ public class ALPACAManager {
 	private MainGUI mainGUI = null;
 
 	private ALPACAManager() {
-
 	}
 
 	public String getLogContent() {
@@ -259,7 +259,7 @@ public class ALPACAManager {
 			}
 			Set<String[]> POSpatternsOfInterest = PhraseAnalyzer.getPOSpatterns(pattFile);
 			Set<String> result = KeywordExplorer.expand(words, word2vec, currentDataset, 0.7, 0.7, IDFWeights, pattFile,
-					POSpatternsOfInterest, outDir,dataDirectory + "metadata.csv");
+					POSpatternsOfInterest, outDir, dataDirectory + "metadata.csv");
 			System.out.println();
 			// open the folder
 			Util.openFile(outDir);
@@ -269,16 +269,16 @@ public class ALPACAManager {
 		}
 	}
 
-	public Map<String, Double> readWordsSkewness(int typeOfScore, String fileName) throws Throwable {
+	public static Map<String, Double> readWordsSkewness(int typeOfScore, String fileName) throws Throwable {
 		// wordScore = new HashMap<>();
 		Map<String, Double> IDFWeights = new HashMap<>();
 		CSVReader reader = new CSVReader(new FileReader(fileName), ',', CSVWriter.DEFAULT_ESCAPE_CHARACTER);
 		String[] line = reader.readNext();
 		while ((line = reader.readNext()) != null) {
 			double score = Double.valueOf(line[typeOfScore]);
-			double idf = Double.valueOf(line[KeywordAnalyzer.TFIDF]);
+			// double idf = Double.valueOf(line[KeywordAnalyzer.TFIDF]);
 			// wordScore.put(line[0], score);
-			IDFWeights.put(line[0], idf);
+			IDFWeights.put(line[0], score);
 		}
 		reader.close();
 		return IDFWeights;
@@ -320,7 +320,8 @@ public class ALPACAManager {
 			normalizer.readConfigINI(configFile);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			System.err.println("Cannot find the file specified.");
+			// System.err.println("Cannot find the file specified.");
+			mainGUI.setActionLabel("FAILURE: Cannot find the dictionary config file!");
 			return false;
 		}
 		return true;
@@ -364,6 +365,10 @@ public class ALPACAManager {
 				// Turn off metal's use of bold fonts
 				UIManager.put("swing.boldMetal", Boolean.FALSE);
 				mainGUI = MainGUI.createAndShowGUI();
+				if (RELEASE)
+					readCONFIG("\\dictionary\\config.ini");
+				else
+					readCONFIG("C:\\Users\\pmv0006\\Desktop\\ALPACARunningPackage\\dictionary\\config.ini");
 			}
 		});
 	}
@@ -434,7 +439,7 @@ public class ALPACAManager {
 		}
 	}
 
-	private void searchAndOutput2HTML(Dataset dts, Set<String> termset, String htmlFile, Collection<String> words,
+	public static void searchAndOutput2HTML(Dataset dts, Set<String> termset, String htmlFile, Collection<String> words,
 			String intentPattern, double threshold) {
 		try {
 
@@ -546,7 +551,7 @@ public class ALPACAManager {
 							int POSid = voc.getWordFromDB(ID).getPOS();
 							if (POSid == NN || POSid == VB) {
 								double score = Double.valueOf(line[schema]);
-								//double idf = Double.valueOf(line[KeywordAnalyzer.TFIDF]);
+								// double idf = Double.valueOf(line[KeywordAnalyzer.TFIDF]);
 								// wordScore.put(line[0], score);
 								keywords.put(line[0], score);
 								break;

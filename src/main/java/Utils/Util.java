@@ -41,7 +41,22 @@ public class Util {
 		});
 		return filePaths;
 	}
+	public static List<String> listSubFoldersForFolder(final String folderName) throws IOException {
+		List<String> subFolderPaths = new ArrayList<>();
 
+        File directory = new File(folderName);
+
+        File[] fList = directory.listFiles();
+
+        for (File file : fList){
+
+            if (file.isDirectory()){
+            	subFolderPaths.add(file.getAbsolutePath());
+            }
+
+        }
+		return subFolderPaths;
+	}
 	/**
 	 * Export a resource embedded into a Jar file to the local file path.
 	 *

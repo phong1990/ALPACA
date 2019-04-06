@@ -37,7 +37,8 @@ import Utils.Util;
 import Vocabulary.Vocabulary;
 
 public class PreprocesorMain {
-
+	
+	public static final int LV0_NONE = 0;
 	public static final int LV1_SPELLING_CORRECTION = 1;
 	public static final int LV2_ROOTWORD_STEMMING = 2;
 	public static final int LV3_OVER_STEMMING = 3;
@@ -206,9 +207,9 @@ public class PreprocesorMain {
 				boolean has_rating = Boolean.parseBoolean(line[2]);
 				boolean has_time = Boolean.parseBoolean(line[3]);
 				boolean has_author = Boolean.parseBoolean(line[4]);
-				String otherMetadata = line[5];
+				//String otherMetadata = line[5];
 				// add to database, get id back
-				dataset = new Dataset(name, description, has_time, has_rating, has_author, otherMetadata, directory,
+				dataset = new Dataset(name, description, has_time, has_rating, has_author, "false", directory,
 						level);
 				while ((line = reader.readNext()) != null) {
 

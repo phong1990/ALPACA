@@ -102,6 +102,7 @@ public class KeywordExplorer {
 	private static Set<VectorableToken> addSingleWords(Collection<String> wordList,
 			WordVec word2vec, Dataset dataset, Map<String, Double> IDFWeights)
 			throws Throwable {
+		
 		Set<VectorableToken> selection = new HashSet<>();
 		for (String word : wordList) {
 			if (word.contains("_")) {

@@ -64,6 +64,7 @@ public class HTMLOutput {
 									pw.println("<td>" + res.time + "</td>");
 									pw.println("<td>" + res.rating + "</td>");
 									pw.println("<td>" + res.reviewText + "</td>");
+									pw.println("<td>" + res.replyText + "</td>");
 									pw.println("</tr>");
 								}
 							} else {
@@ -99,13 +100,15 @@ public class HTMLOutput {
 	public static class FinalResult {
 
 		public String reviewText;
+		public String replyText;
 		public String time;
 		public int rating;
 
-		public FinalResult(String review, String time, int rating) {
+		public FinalResult(String review, String reply, String time, int rating) {
 			this.reviewText = review;
 			this.time = time;
 			this.rating = rating;
+			this.replyText = reply;
 		}
 	}
 }
